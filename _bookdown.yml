@@ -1,0 +1,8 @@
+book_filename: "powerbook.Rmd"
+repo: https://github.com/anikoszabo/powerbook
+output_dir: docs
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: ""
+new_session: yes

@@ -1,0 +1,11 @@
+one-sample-proportion
+example
+data-generating-mechanism
+precision-based-sample-size
+power-based-sample-size
+test-statistic
+power-formula
+getting-inputs-worstbest-case-scenarios
+example-revisited
+simulation-study
+functions-in-r-packages
