@@ -18,3 +18,4 @@ github-repo: anikoszabo/powerbook
 This repository is for a [Bookdown](https://bookdown.org/) version of a reference book for power and sample size calculations using R.
 
 It is very much a work in progress, and fixes/contributions in the form of pull requests are welcome.
+
