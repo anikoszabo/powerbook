@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Power and Sample Size Manual</title>
+  <title>1 One-sample mean | Power and Sample Size Manual</title>
   <meta name="description" content="This is a reference book for power and sample size calculations using R" />
   <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Power and Sample Size Manual" />
+  <meta property="og:title" content="1 One-sample mean | Power and Sample Size Manual" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a reference book for power and sample size calculations using R" />
   <meta name="github-repo" content="anikoszabo/powerbook" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Power and Sample Size Manual" />
+  <meta name="twitter:title" content="1 One-sample mean | Power and Sample Size Manual" />
   
   <meta name="twitter:description" content="This is a reference book for power and sample size calculations using R" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="one-sample-mean.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="one-sample-proportion.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -124,16 +124,41 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Power and Sample Size Manual</h1>
-<p class="author"><em>Aniko Szabo</em></p>
-<p class="date"><em>2023-01-04</em></p>
+<div id="one-sample-mean" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> One-sample mean<a href="one-sample-mean.html#one-sample-mean" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="example" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Example<a href="one-sample-mean.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <a href="https://www.healthmeasures.net/explore-measurement-systems/promis">Patient-Reported Outcomes Measurement Information System (PROMIS)</a> provides validated questionnaires for a wide range of quality-of-life outcomes in the domains of physical, mental, and social health. The responses from a subject are summarized with a T-score, which has a mean 50 and standard deviation of 10 in the US general population.</p>
+<p>An investigator wants to study anxiety in the population of patients with cyclic vomiting syndrome (CVS) using the PROMIS Anxiety scale to see if they report more anxiety (ie higher T-scores on the scale) than the general population. How many subjects are needed?</p>
 </div>
-<div id="welcome" class="section level1 unnumbered hasAnchor">
-<h1>Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This repository is for a <a href="https://bookdown.org/">Bookdown</a> version of a reference book for power and sample size calculations using R.</p>
-<p>It is very much a work in progress, and fixes/contributions in the form of pull requests are welcome.</p>
+<div id="data-generating-mechanism" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Data generating mechanism<a href="one-sample-mean.html#data-generating-mechanism" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="precision-based-sample-size" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Precision-based sample size<a href="one-sample-mean.html#precision-based-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="power-based-sample-size" class="section level2 hasAnchor" number="1.4">
+<h2><span class="header-section-number">1.4</span> Power-based sample size<a href="one-sample-mean.html#power-based-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="test-statistic" class="section level3 hasAnchor" number="1.4.1">
+<h3><span class="header-section-number">1.4.1</span> Test statistic<a href="one-sample-mean.html#test-statistic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="power-formula" class="section level3 hasAnchor" number="1.4.2">
+<h3><span class="header-section-number">1.4.2</span> Power formula<a href="one-sample-mean.html#power-formula" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+</div>
+<div id="getting-inputs" class="section level2 hasAnchor" number="1.5">
+<h2><span class="header-section-number">1.5</span> Getting inputs<a href="one-sample-mean.html#getting-inputs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="example-revisited" class="section level2 hasAnchor" number="1.6">
+<h2><span class="header-section-number">1.6</span> Example revisited<a href="one-sample-mean.html#example-revisited" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="simulation-study" class="section level2 hasAnchor" number="1.7">
+<h2><span class="header-section-number">1.7</span> Simulation study<a href="one-sample-mean.html#simulation-study" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="functions-in-r-packages" class="section level2 hasAnchor" number="1.8">
+<h2><span class="header-section-number">1.8</span> Functions in R packages<a href="one-sample-mean.html#functions-in-r-packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
+</div>
 </div>
 
 
@@ -145,8 +170,8 @@
           </div>
         </div>
       </div>
-
-<a href="one-sample-mean.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="one-sample-proportion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
