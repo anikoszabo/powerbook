@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Power and Sample Size Manual</title>
+  <title>2 One-sample proportion: precision-based sample size | Power and Sample Size Manual</title>
   <meta name="description" content="This is a reference book for power and sample size calculations using R" />
   <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Power and Sample Size Manual" />
+  <meta property="og:title" content="2 One-sample proportion: precision-based sample size | Power and Sample Size Manual" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a reference book for power and sample size calculations using R" />
   <meta name="github-repo" content="anikoszabo/powerbook" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Power and Sample Size Manual" />
+  <meta name="twitter:title" content="2 One-sample proportion: precision-based sample size | Power and Sample Size Manual" />
   
   <meta name="twitter:description" content="This is a reference book for power and sample size calculations using R" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="one-sample-mean.html"/>
+<link rel="prev" href="one-sample-mean.html"/>
+<link rel="next" href="one-sample-proportion-power-based-sample-size.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -201,29 +201,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Power and Sample Size Manual</h1>
-<p class="author"><em>Aniko Szabo</em></p>
-<p class="date"><em>2023-01-06</em></p>
+<div id="one-sample-proportion-precision-based-sample-size" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> One-sample proportion: precision-based sample size<a href="one-sample-proportion-precision-based-sample-size.html#one-sample-proportion-precision-based-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="example-1" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Example<a href="one-sample-proportion-precision-based-sample-size.html#example-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An educator wants to conduct a survey of first-year medical residents. The survey contains yes/no questions for several specific medical procedures asking whether they would be comfortable performing it without the presence of an attending physician. How many residents should he recruit?</p>
 </div>
-<div id="welcome" class="section level1 unnumbered hasAnchor">
-<h1>Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This repository is for a <a href="https://bookdown.org/">Bookdown</a> version of a reference book for power and sample size calculations using R.</p>
-<p>It is very much a work in progress, and fixes/contributions in the form of pull requests are welcome.</p>
+<div id="data-generating-mechanism-1" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Data generating mechanism<a href="one-sample-proportion-precision-based-sample-size.html#data-generating-mechanism-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Independent identically distributed variables <span class="math inline">\(X_1, \ldots, X_n \sim Bernoulli(p)\)</span> with <span class="math inline">\(p\)</span>, the event probability as the parameter of interest.</p>
+<p>It will be estimated as the sample proportion <span class="math inline">\(\hat{p} = \sum_{i=1}^n X_i / n\)</span>. Inference can be based on the exact distribution of <span class="math inline">\(X = \sum_{i=1}^n X_i \sim Binom(n,p)\)</span> or the asymptotic distribution of <span class="math inline">\(\hat{p} \sim N(p, \frac{p(1-p)}{n})\)</span>.</p>
+</div>
+<div id="precision-measures" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Precision measures<a href="one-sample-proportion-precision-based-sample-size.html#precision-measures" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="standard-error" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Standard error<a href="one-sample-proportion-precision-based-sample-size.html#standard-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The standard error of <span class="math inline">\(\hat{p}\)</span> is</p>
+<p><span class="math display">\[\begin{equation}
+SE(\hat{p}) = \sqrt\frac{p(1-p)}{n}
+\end{equation}\]</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate standard error for given sample size, or vice versa. Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL</span></span>
+<span id="cb1-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; p - expected event probability</span></span>
+<span id="cb1-3"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; n - sample size</span></span>
+<span id="cb1-4"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; se - standard error of estimated probability</span></span>
+<span id="cb1-5"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-5" aria-hidden="true" tabindex="-1"></a>prec<span class="fl">.1</span>prop <span class="ot">&lt;-</span> <span class="cf">function</span>(p, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">se=</span><span class="cn">NULL</span>){</span>
+<span id="cb1-6"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(n) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(se)){</span>
+<span id="cb1-7"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-7" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> p <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p) <span class="sc">/</span> se<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb1-8"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(n) <span class="sc">&amp;</span> <span class="fu">is.null</span>(se)){</span>
+<span id="cb1-9"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-9" aria-hidden="true" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">/</span>n)</span>
+<span id="cb1-10"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="fu">stop</span>(<span class="st">&quot;Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL&quot;</span>)</span>
+<span id="cb1-11"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-12"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-12" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">p =</span> p, <span class="at">n =</span> n, <span class="at">se =</span> se)</span>
+<span id="cb1-13"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-13" aria-hidden="true" tabindex="-1"></a>  res</span>
+<span id="cb1-14"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="confidence-interval-or-margin-of-error" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Confidence interval or margin of error<a href="one-sample-proportion-precision-based-sample-size.html#confidence-interval-or-margin-of-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+</div>
+<div id="getting-inputs-worstbest-case-scenarios" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Getting inputs, worst/best case scenarios<a href="one-sample-proportion-precision-based-sample-size.html#getting-inputs-worstbest-case-scenarios" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="example-revisited-1" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Example revisited<a href="one-sample-proportion-precision-based-sample-size.html#example-revisited-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="simulation-study-1" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Simulation study<a href="one-sample-proportion-precision-based-sample-size.html#simulation-study-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="functions-in-r-packages-1" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Functions in R packages<a href="one-sample-proportion-precision-based-sample-size.html#functions-in-r-packages-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
-
-
-
-
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="one-sample-mean.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="one-sample-mean.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="one-sample-proportion-power-based-sample-size.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
