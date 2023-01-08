@@ -22,7 +22,7 @@ There are three commonly used tests:
  2. One-sample **Wald z-test** with test statistic  $Z_W = \frac{\hat{p} - p_0}{\sqrt{\hat{p}(1-\hat{p})/n}} \approx N(0,1)$ under $H_0$
  3. One-sample **Score z-test** with test statistic  $Z_S = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \approx N(0,1)$ under $H_0$
  
-Table (\#tab:oneprop-rejection) Rejection regions for the tests
+**Rejection regions for the tests**
 
 | Test           | $H_{a1}: p \neq p_0$ | $H_{a2}: p > p_0$ | $H_{a3}: p < p_0$ |
 |:---------------|:--------------------:|:-----------------:|:-----------------:|
@@ -36,7 +36,7 @@ where $b_{\alpha; n,p_0}$ is the upper $\alpha$th quantile of the $Binomial(n,p_
 
 The power for a specific alternative $p=p_1$ are shown for the one-sided alternative hypothesis $H_{a2}$. The formula for $H_{a3}$ is a straightforward modification, while the power for the two-sided hypothesis is the sum of the powers for the two one-sided hypotheses using $\alpha/2$ instead of $\alpha$.
 
-Table (\#tab:oneprop-power) Power for the tests
+**Power for the tests**
 
 | Test           | Prob(rejecting $H_0$ versus $H_{a2}$) | 
 |:---------------|:-------------------------------------:|

@@ -27,7 +27,7 @@ SE(\hat{p}) = \sqrt\frac{p(1-p)}{n}
 #' p - expected event probability
 #' n - sample size
 #' se - standard error of estimated probability
-prec.1prop <- function(p, n=NULL, se=NULL){
+se_prop <- function(p, n=NULL, se=NULL){
   if (is.null(n) & !is.null(se)){
     n <- p * (1-p) / se^2
   } else if (!is.null(n) & is.null(se)){
@@ -39,12 +39,44 @@ prec.1prop <- function(p, n=NULL, se=NULL){
 }
 ```
 
-### Confidence interval or margin of error
+### Confidence interval 
+
+Another way to quantify the precision of the estimated proportion is the width of the resulting two-sided confidence interval, usually at a 95% confidence level. The half of the width of a symmetric 95% confidence interval is also called the _margin of error_. There are several methods for estimating a confidence interval for a proportion, most of which resulting in non-symmetric intervals.
+
+**Confidence interval methods**
+
+| Method          | $100(1-\alpha)$% confidence interval | 
+|:---------------|:-------------------------------------:|
+| Wald           | $\Big(\hat{p} \pm z_*\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}\Big)$|
+| Wilson         | $\Big(\hat{p}_{adj} \pm \frac{z_*}{1+z_*^2/n} \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z_*^2}{4n^2}}\Big)$|
+| Exact binomial | $(b_{1-\frac{\alpha}{2}; n,\hat{p}}; b_{\frac{\alpha}{2}; n,\hat{p}})$|
+| Agresti-Coull  |$(\hat{p}_{adj} \pm z_*\sqrt{p_{adj}(1-p_{adj})/n})$
+
+where $\hat{p}_{adj} = \frac{X + 0.5z_*^2}{n + z_*^2}$, $b_{\frac{\alpha}{2}; n,p}$ is the upper $\frac{\alpha}{2}$th quantile of the $Binomial(n,p)$ distribution, $z_* = z_\frac{\alpha}{2}$ denotes the upper $\frac{\alpha}{2}$th quantile of the standard normal distribution, and $(a \pm d)$ is a shorthand for a symmetric confidence interval $(a-d, a+d)$ with margin of error $d$.
+
+The calculation of the sample size `n` or the confidence interval width is implemented in the `presize` R package. [@R-presize; @presize2021]
+
+
+```r
+str(presize::prec_prop)
+```
+
+```
+## function (p, n = NULL, conf.width = NULL, conf.level = 0.95, method = c("wilson", 
+##     "agresti-coull", "exact", "wald"), ...)
+```
+
 
 ## Getting inputs, worst/best case scenarios
+
+The only input needed is a best guess at $p$, the proportion to be estimated. 
+
+
+
 
 ## Example revisited 
 
 ## Simulation study
 
 ## Functions in R packages
+

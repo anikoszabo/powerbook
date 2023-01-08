@@ -23,7 +23,7 @@
 <meta name="author" content="Aniko Szabo" />
 
 
-<meta name="date" content="2023-01-06" />
+<meta name="date" content="2023-01-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -119,6 +119,28 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -161,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#precision-measures"><i class="fa fa-check"></i><b>2.3</b> Precision measures</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#standard-error"><i class="fa fa-check"></i><b>2.3.1</b> Standard error</a></li>
-<li class="chapter" data-level="2.3.2" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#confidence-interval-or-margin-of-error"><i class="fa fa-check"></i><b>2.3.2</b> Confidence interval or margin of error</a></li>
+<li class="chapter" data-level="2.3.2" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#confidence-interval"><i class="fa fa-check"></i><b>2.3.2</b> Confidence interval</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#getting-inputs-worstbest-case-scenarios"><i class="fa fa-check"></i><b>2.4</b> Getting inputs, worst/best case scenarios</a></li>
 <li class="chapter" data-level="2.5" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#example-revisited-1"><i class="fa fa-check"></i><b>2.5</b> Example revisited</a></li>
@@ -223,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>One-sample <strong>Wald z-test</strong> with test statistic <span class="math inline">\(Z_W = \frac{\hat{p} - p_0}{\sqrt{\hat{p}(1-\hat{p})/n}} \approx N(0,1)\)</span> under <span class="math inline">\(H_0\)</span></li>
 <li>One-sample <strong>Score z-test</strong> with test statistic <span class="math inline">\(Z_S = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \approx N(0,1)\)</span> under <span class="math inline">\(H_0\)</span></li>
 </ol>
-<p>Table (#tab:oneprop-rejection) Rejection regions for the tests</p>
+<p><strong>Rejection regions for the tests</strong></p>
 <table>
 <colgroup>
 <col width="21%" />
@@ -265,7 +287,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="power-formula-1" class="section level3 unnumbered hasAnchor">
 <h3>Power formula<a href="one-sample-proportion-power-based-sample-size.html#power-formula-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The power for a specific alternative <span class="math inline">\(p=p_1\)</span> are shown for the one-sided alternative hypothesis <span class="math inline">\(H_{a2}\)</span>. The formula for <span class="math inline">\(H_{a3}\)</span> is a straightforward modification, while the power for the two-sided hypothesis is the sum of the powers for the two one-sided hypotheses using <span class="math inline">\(\alpha/2\)</span> instead of <span class="math inline">\(\alpha\)</span>.</p>
-<p>Table (#tab:oneprop-power) Power for the tests</p>
+<p><strong>Power for the tests</strong></p>
 <table>
 <colgroup>
 <col width="29%" />
@@ -293,77 +315,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>where <span class="math inline">\(F_{B(n,p)}\)</span> is the cdf of the <span class="math inline">\(Binomial(n,p)\)</span> distribution, and <span class="math inline">\(\Phi\)</span> is the cdf of the <span class="math inline">\(N(0,1)\)</span> distribution.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="one-sample-proportion-power-based-sample-size.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate power for given sample size, or vice versa. Exactly one of &#39;n&#39; and &#39;power&#39; has to be NULL</span></span>
-<span id="cb2-2"><a href="one-sample-proportion-power-based-sample-size.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; p0 - null hypothesis event probability</span></span>
-<span id="cb2-3"><a href="one-sample-proportion-power-based-sample-size.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; p1 - alternative hypothesis event probability</span></span>
-<span id="cb2-4"><a href="one-sample-proportion-power-based-sample-size.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; n - sample size</span></span>
-<span id="cb2-5"><a href="one-sample-proportion-power-based-sample-size.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; power - power to reject the null hypothesis</span></span>
-<span id="cb2-6"><a href="one-sample-proportion-power-based-sample-size.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; sig.level - significance level of test</span></span>
-<span id="cb2-7"><a href="one-sample-proportion-power-based-sample-size.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; alternative - type of alternative hypothesis</span></span>
-<span id="cb2-8"><a href="one-sample-proportion-power-based-sample-size.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; test - type of test</span></span>
-<span id="cb2-9"><a href="one-sample-proportion-power-based-sample-size.html#cb2-9" aria-hidden="true" tabindex="-1"></a>power<span class="fl">.1</span>prop.test <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">power=</span><span class="cn">NULL</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, </span>
-<span id="cb2-10"><a href="one-sample-proportion-power-based-sample-size.html#cb2-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">alternative=</span><span class="fu">c</span>(<span class="st">&quot;less&quot;</span>,<span class="st">&quot;greater&quot;</span>,<span class="st">&quot;two.sided&quot;</span>),</span>
-<span id="cb2-11"><a href="one-sample-proportion-power-based-sample-size.html#cb2-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test =</span> <span class="fu">c</span>(<span class="st">&quot;Wald&quot;</span>,<span class="st">&quot;score&quot;</span>,<span class="st">&quot;binomial&quot;</span>)){</span>
-<span id="cb2-12"><a href="one-sample-proportion-power-based-sample-size.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  alternative <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(alternative)</span>
-<span id="cb2-13"><a href="one-sample-proportion-power-based-sample-size.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  sides <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(alternative<span class="sc">==</span><span class="st">&quot;two.sided&quot;</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb2-14"><a href="one-sample-proportion-power-based-sample-size.html#cb2-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-15"><a href="one-sample-proportion-power-based-sample-size.html#cb2-15" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(test)</span>
-<span id="cb2-16"><a href="one-sample-proportion-power-based-sample-size.html#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-17"><a href="one-sample-proportion-power-based-sample-size.html#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (test <span class="sc">==</span> <span class="st">&quot;binomial&quot;</span>){</span>
-<span id="cb2-18"><a href="one-sample-proportion-power-based-sample-size.html#cb2-18" aria-hidden="true" tabindex="-1"></a>    p.body.up <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
-<span id="cb2-19"><a href="one-sample-proportion-power-based-sample-size.html#cb2-19" aria-hidden="true" tabindex="-1"></a>      ba <span class="ot">&lt;-</span> <span class="fu">qbinom</span>(sig.level<span class="sc">/</span>sides, <span class="at">size =</span> n, <span class="at">prob=</span>p0, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb2-20"><a href="one-sample-proportion-power-based-sample-size.html#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pbinom</span>(ba, <span class="at">size=</span>n, <span class="at">prob=</span>p1, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)})</span>
-<span id="cb2-21"><a href="one-sample-proportion-power-based-sample-size.html#cb2-21" aria-hidden="true" tabindex="-1"></a>    p.body.lo <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
-<span id="cb2-22"><a href="one-sample-proportion-power-based-sample-size.html#cb2-22" aria-hidden="true" tabindex="-1"></a>      ba <span class="ot">&lt;-</span> <span class="fu">qbinom</span>(sig.level<span class="sc">/</span>sides, <span class="at">size =</span> n, <span class="at">prob=</span>p0, <span class="at">lower.tail=</span><span class="cn">TRUE</span>)</span>
-<span id="cb2-23"><a href="one-sample-proportion-power-based-sample-size.html#cb2-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pbinom</span>(ba, <span class="at">size=</span>n, <span class="at">prob=</span>p1, <span class="at">lower.tail =</span> <span class="cn">TRUE</span>)})</span>
-<span id="cb2-24"><a href="one-sample-proportion-power-based-sample-size.html#cb2-24" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb2-25"><a href="one-sample-proportion-power-based-sample-size.html#cb2-25" aria-hidden="true" tabindex="-1"></a>    za <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(sig.level<span class="sc">/</span>sides, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-26"><a href="one-sample-proportion-power-based-sample-size.html#cb2-26" aria-hidden="true" tabindex="-1"></a>    vratio <span class="ot">&lt;-</span> <span class="cf">if</span> (test <span class="sc">==</span> <span class="st">&quot;score&quot;</span>){ <span class="fu">sqrt</span>(p0 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p0) <span class="sc">/</span> (p1 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p1)))} <span class="cf">else</span> <span class="dv">1</span></span>
-<span id="cb2-27"><a href="one-sample-proportion-power-based-sample-size.html#cb2-27" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> (p0 <span class="sc">-</span> p1)<span class="sc">/</span><span class="fu">sqrt</span>(p1<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p1)) </span>
-<span id="cb2-28"><a href="one-sample-proportion-power-based-sample-size.html#cb2-28" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-29"><a href="one-sample-proportion-power-based-sample-size.html#cb2-29" aria-hidden="true" tabindex="-1"></a>    p.body.up  <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
-<span id="cb2-30"><a href="one-sample-proportion-power-based-sample-size.html#cb2-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(za <span class="sc">*</span> vratio <span class="sc">+</span> delta <span class="sc">*</span> <span class="fu">sqrt</span>(n), <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-31"><a href="one-sample-proportion-power-based-sample-size.html#cb2-31" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb2-32"><a href="one-sample-proportion-power-based-sample-size.html#cb2-32" aria-hidden="true" tabindex="-1"></a>    p.body.lo  <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
-<span id="cb2-33"><a href="one-sample-proportion-power-based-sample-size.html#cb2-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(<span class="sc">-</span>za <span class="sc">*</span> vratio <span class="sc">+</span> delta <span class="sc">*</span> <span class="fu">sqrt</span>(n), <span class="at">lower.tail =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-34"><a href="one-sample-proportion-power-based-sample-size.html#cb2-34" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb2-35"><a href="one-sample-proportion-power-based-sample-size.html#cb2-35" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-36"><a href="one-sample-proportion-power-based-sample-size.html#cb2-36" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-37"><a href="one-sample-proportion-power-based-sample-size.html#cb2-37" aria-hidden="true" tabindex="-1"></a>  p.body <span class="ot">&lt;-</span> <span class="cf">if</span> (alternative<span class="sc">==</span><span class="st">&quot;two.sided&quot;</span>)</span>
-<span id="cb2-38"><a href="one-sample-proportion-power-based-sample-size.html#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">call</span>(<span class="st">&quot;+&quot;</span>, p.body.lo, p.body.up)</span>
-<span id="cb2-39"><a href="one-sample-proportion-power-based-sample-size.html#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (alternative<span class="sc">==</span><span class="st">&quot;greater&quot;</span>)</span>
-<span id="cb2-40"><a href="one-sample-proportion-power-based-sample-size.html#cb2-40" aria-hidden="true" tabindex="-1"></a>    p.body.up</span>
-<span id="cb2-41"><a href="one-sample-proportion-power-based-sample-size.html#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> </span>
-<span id="cb2-42"><a href="one-sample-proportion-power-based-sample-size.html#cb2-42" aria-hidden="true" tabindex="-1"></a>    p.body.lo</span>
-<span id="cb2-43"><a href="one-sample-proportion-power-based-sample-size.html#cb2-43" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-44"><a href="one-sample-proportion-power-based-sample-size.html#cb2-44" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-45"><a href="one-sample-proportion-power-based-sample-size.html#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(power) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(n)){</span>
-<span id="cb2-46"><a href="one-sample-proportion-power-based-sample-size.html#cb2-46" aria-hidden="true" tabindex="-1"></a>    power <span class="ot">&lt;-</span> <span class="fu">eval</span>(p.body)</span>
-<span id="cb2-47"><a href="one-sample-proportion-power-based-sample-size.html#cb2-47" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(power) <span class="sc">&amp;</span> <span class="fu">is.null</span>(n)){</span>
-<span id="cb2-48"><a href="one-sample-proportion-power-based-sample-size.html#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (test <span class="sc">==</span> <span class="st">&quot;binomial&quot;</span>){</span>
-<span id="cb2-49"><a href="one-sample-proportion-power-based-sample-size.html#cb2-49" aria-hidden="true" tabindex="-1"></a>      n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb2-50"><a href="one-sample-proportion-power-based-sample-size.html#cb2-50" aria-hidden="true" tabindex="-1"></a>      found <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
-<span id="cb2-51"><a href="one-sample-proportion-power-based-sample-size.html#cb2-51" aria-hidden="true" tabindex="-1"></a>      <span class="cf">while</span> (<span class="sc">!</span>found <span class="sc">&amp;</span> n <span class="sc">&lt;=</span> <span class="fl">1e+7</span>){</span>
-<span id="cb2-52"><a href="one-sample-proportion-power-based-sample-size.html#cb2-52" aria-hidden="true" tabindex="-1"></a>        n <span class="ot">&lt;-</span> n<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb2-53"><a href="one-sample-proportion-power-based-sample-size.html#cb2-53" aria-hidden="true" tabindex="-1"></a>        pw <span class="ot">&lt;-</span> <span class="fu">eval</span>(p.body)</span>
-<span id="cb2-54"><a href="one-sample-proportion-power-based-sample-size.html#cb2-54" aria-hidden="true" tabindex="-1"></a>        found <span class="ot">&lt;-</span> (pw <span class="sc">&gt;=</span> power) </span>
-<span id="cb2-55"><a href="one-sample-proportion-power-based-sample-size.html#cb2-55" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb2-56"><a href="one-sample-proportion-power-based-sample-size.html#cb2-56" aria-hidden="true" tabindex="-1"></a>      power <span class="ot">&lt;-</span> pw</span>
-<span id="cb2-57"><a href="one-sample-proportion-power-based-sample-size.html#cb2-57" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb2-58"><a href="one-sample-proportion-power-based-sample-size.html#cb2-58" aria-hidden="true" tabindex="-1"></a>      n <span class="ot">&lt;-</span> <span class="fu">uniroot</span>(<span class="cf">function</span>(n) <span class="fu">eval</span>(p.body) <span class="sc">-</span> power, <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">1e+07</span>), </span>
-<span id="cb2-59"><a href="one-sample-proportion-power-based-sample-size.html#cb2-59" aria-hidden="true" tabindex="-1"></a>                    <span class="at">tol =</span> .Machine<span class="sc">$</span>double.eps<span class="sc">^</span><span class="fl">0.25</span>, <span class="at">extendInt =</span> <span class="st">&quot;upX&quot;</span>)<span class="sc">$</span>root</span>
-<span id="cb2-60"><a href="one-sample-proportion-power-based-sample-size.html#cb2-60" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-61"><a href="one-sample-proportion-power-based-sample-size.html#cb2-61" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-62"><a href="one-sample-proportion-power-based-sample-size.html#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-63"><a href="one-sample-proportion-power-based-sample-size.html#cb2-63" aria-hidden="true" tabindex="-1"></a>  METHOD <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
-<span id="cb2-64"><a href="one-sample-proportion-power-based-sample-size.html#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span>(test, <span class="at">Wald =</span> <span class="st">&quot;Wald z&quot;</span>, <span class="at">score =</span> <span class="st">&quot;Score z&quot;</span>, <span class="at">binomial =</span> <span class="st">&quot;Exact binomial&quot;</span>),</span>
-<span id="cb2-65"><a href="one-sample-proportion-power-based-sample-size.html#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;test power calculation&quot;</span>)</span>
-<span id="cb2-66"><a href="one-sample-proportion-power-based-sample-size.html#cb2-66" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-67"><a href="one-sample-proportion-power-based-sample-size.html#cb2-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">n =</span> n, <span class="at">p0 =</span> p0, <span class="at">p1 =</span> p1, <span class="at">sig.level =</span> sig.level, </span>
-<span id="cb2-68"><a href="one-sample-proportion-power-based-sample-size.html#cb2-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">power =</span> power, <span class="at">alternative =</span> alternative, <span class="at">note =</span> <span class="st">&quot;n is the number of independent samples&quot;</span>, </span>
-<span id="cb2-69"><a href="one-sample-proportion-power-based-sample-size.html#cb2-69" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> METHOD), <span class="at">class =</span> <span class="st">&quot;power.htest&quot;</span>)</span>
-<span id="cb2-70"><a href="one-sample-proportion-power-based-sample-size.html#cb2-70" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-71"><a href="one-sample-proportion-power-based-sample-size.html#cb2-71" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="one-sample-proportion-power-based-sample-size.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate power for given sample size, or vice versa. Exactly one of &#39;n&#39; and &#39;power&#39; has to be NULL</span></span>
+<span id="cb4-2"><a href="one-sample-proportion-power-based-sample-size.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; p0 - null hypothesis event probability</span></span>
+<span id="cb4-3"><a href="one-sample-proportion-power-based-sample-size.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; p1 - alternative hypothesis event probability</span></span>
+<span id="cb4-4"><a href="one-sample-proportion-power-based-sample-size.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; n - sample size</span></span>
+<span id="cb4-5"><a href="one-sample-proportion-power-based-sample-size.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; power - power to reject the null hypothesis</span></span>
+<span id="cb4-6"><a href="one-sample-proportion-power-based-sample-size.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; sig.level - significance level of test</span></span>
+<span id="cb4-7"><a href="one-sample-proportion-power-based-sample-size.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; alternative - type of alternative hypothesis</span></span>
+<span id="cb4-8"><a href="one-sample-proportion-power-based-sample-size.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; test - type of test</span></span>
+<span id="cb4-9"><a href="one-sample-proportion-power-based-sample-size.html#cb4-9" aria-hidden="true" tabindex="-1"></a>power<span class="fl">.1</span>prop.test <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">power=</span><span class="cn">NULL</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, </span>
+<span id="cb4-10"><a href="one-sample-proportion-power-based-sample-size.html#cb4-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">alternative=</span><span class="fu">c</span>(<span class="st">&quot;less&quot;</span>,<span class="st">&quot;greater&quot;</span>,<span class="st">&quot;two.sided&quot;</span>),</span>
+<span id="cb4-11"><a href="one-sample-proportion-power-based-sample-size.html#cb4-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test =</span> <span class="fu">c</span>(<span class="st">&quot;Wald&quot;</span>,<span class="st">&quot;score&quot;</span>,<span class="st">&quot;binomial&quot;</span>)){</span>
+<span id="cb4-12"><a href="one-sample-proportion-power-based-sample-size.html#cb4-12" aria-hidden="true" tabindex="-1"></a>  alternative <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(alternative)</span>
+<span id="cb4-13"><a href="one-sample-proportion-power-based-sample-size.html#cb4-13" aria-hidden="true" tabindex="-1"></a>  sides <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(alternative<span class="sc">==</span><span class="st">&quot;two.sided&quot;</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb4-14"><a href="one-sample-proportion-power-based-sample-size.html#cb4-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-15"><a href="one-sample-proportion-power-based-sample-size.html#cb4-15" aria-hidden="true" tabindex="-1"></a>  test <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(test)</span>
+<span id="cb4-16"><a href="one-sample-proportion-power-based-sample-size.html#cb4-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-17"><a href="one-sample-proportion-power-based-sample-size.html#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (test <span class="sc">==</span> <span class="st">&quot;binomial&quot;</span>){</span>
+<span id="cb4-18"><a href="one-sample-proportion-power-based-sample-size.html#cb4-18" aria-hidden="true" tabindex="-1"></a>    p.body.up <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
+<span id="cb4-19"><a href="one-sample-proportion-power-based-sample-size.html#cb4-19" aria-hidden="true" tabindex="-1"></a>      ba <span class="ot">&lt;-</span> <span class="fu">qbinom</span>(sig.level<span class="sc">/</span>sides, <span class="at">size =</span> n, <span class="at">prob=</span>p0, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb4-20"><a href="one-sample-proportion-power-based-sample-size.html#cb4-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pbinom</span>(ba, <span class="at">size=</span>n, <span class="at">prob=</span>p1, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)})</span>
+<span id="cb4-21"><a href="one-sample-proportion-power-based-sample-size.html#cb4-21" aria-hidden="true" tabindex="-1"></a>    p.body.lo <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
+<span id="cb4-22"><a href="one-sample-proportion-power-based-sample-size.html#cb4-22" aria-hidden="true" tabindex="-1"></a>      ba <span class="ot">&lt;-</span> <span class="fu">qbinom</span>(sig.level<span class="sc">/</span>sides, <span class="at">size =</span> n, <span class="at">prob=</span>p0, <span class="at">lower.tail=</span><span class="cn">TRUE</span>)</span>
+<span id="cb4-23"><a href="one-sample-proportion-power-based-sample-size.html#cb4-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pbinom</span>(ba, <span class="at">size=</span>n, <span class="at">prob=</span>p1, <span class="at">lower.tail =</span> <span class="cn">TRUE</span>)})</span>
+<span id="cb4-24"><a href="one-sample-proportion-power-based-sample-size.html#cb4-24" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb4-25"><a href="one-sample-proportion-power-based-sample-size.html#cb4-25" aria-hidden="true" tabindex="-1"></a>    za <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(sig.level<span class="sc">/</span>sides, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-26"><a href="one-sample-proportion-power-based-sample-size.html#cb4-26" aria-hidden="true" tabindex="-1"></a>    vratio <span class="ot">&lt;-</span> <span class="cf">if</span> (test <span class="sc">==</span> <span class="st">&quot;score&quot;</span>){ <span class="fu">sqrt</span>(p0 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p0) <span class="sc">/</span> (p1 <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>p1)))} <span class="cf">else</span> <span class="dv">1</span></span>
+<span id="cb4-27"><a href="one-sample-proportion-power-based-sample-size.html#cb4-27" aria-hidden="true" tabindex="-1"></a>    delta <span class="ot">&lt;-</span> (p0 <span class="sc">-</span> p1)<span class="sc">/</span><span class="fu">sqrt</span>(p1<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p1)) </span>
+<span id="cb4-28"><a href="one-sample-proportion-power-based-sample-size.html#cb4-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-29"><a href="one-sample-proportion-power-based-sample-size.html#cb4-29" aria-hidden="true" tabindex="-1"></a>    p.body.up  <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
+<span id="cb4-30"><a href="one-sample-proportion-power-based-sample-size.html#cb4-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(za <span class="sc">*</span> vratio <span class="sc">+</span> delta <span class="sc">*</span> <span class="fu">sqrt</span>(n), <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-31"><a href="one-sample-proportion-power-based-sample-size.html#cb4-31" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-32"><a href="one-sample-proportion-power-based-sample-size.html#cb4-32" aria-hidden="true" tabindex="-1"></a>    p.body.lo  <span class="ot">&lt;-</span> <span class="fu">quote</span>({</span>
+<span id="cb4-33"><a href="one-sample-proportion-power-based-sample-size.html#cb4-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(<span class="sc">-</span>za <span class="sc">*</span> vratio <span class="sc">+</span> delta <span class="sc">*</span> <span class="fu">sqrt</span>(n), <span class="at">lower.tail =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-34"><a href="one-sample-proportion-power-based-sample-size.html#cb4-34" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-35"><a href="one-sample-proportion-power-based-sample-size.html#cb4-35" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-36"><a href="one-sample-proportion-power-based-sample-size.html#cb4-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-37"><a href="one-sample-proportion-power-based-sample-size.html#cb4-37" aria-hidden="true" tabindex="-1"></a>  p.body <span class="ot">&lt;-</span> <span class="cf">if</span> (alternative<span class="sc">==</span><span class="st">&quot;two.sided&quot;</span>)</span>
+<span id="cb4-38"><a href="one-sample-proportion-power-based-sample-size.html#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">call</span>(<span class="st">&quot;+&quot;</span>, p.body.lo, p.body.up)</span>
+<span id="cb4-39"><a href="one-sample-proportion-power-based-sample-size.html#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (alternative<span class="sc">==</span><span class="st">&quot;greater&quot;</span>)</span>
+<span id="cb4-40"><a href="one-sample-proportion-power-based-sample-size.html#cb4-40" aria-hidden="true" tabindex="-1"></a>    p.body.up</span>
+<span id="cb4-41"><a href="one-sample-proportion-power-based-sample-size.html#cb4-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> </span>
+<span id="cb4-42"><a href="one-sample-proportion-power-based-sample-size.html#cb4-42" aria-hidden="true" tabindex="-1"></a>    p.body.lo</span>
+<span id="cb4-43"><a href="one-sample-proportion-power-based-sample-size.html#cb4-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-44"><a href="one-sample-proportion-power-based-sample-size.html#cb4-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-45"><a href="one-sample-proportion-power-based-sample-size.html#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(power) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(n)){</span>
+<span id="cb4-46"><a href="one-sample-proportion-power-based-sample-size.html#cb4-46" aria-hidden="true" tabindex="-1"></a>    power <span class="ot">&lt;-</span> <span class="fu">eval</span>(p.body)</span>
+<span id="cb4-47"><a href="one-sample-proportion-power-based-sample-size.html#cb4-47" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(power) <span class="sc">&amp;</span> <span class="fu">is.null</span>(n)){</span>
+<span id="cb4-48"><a href="one-sample-proportion-power-based-sample-size.html#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (test <span class="sc">==</span> <span class="st">&quot;binomial&quot;</span>){</span>
+<span id="cb4-49"><a href="one-sample-proportion-power-based-sample-size.html#cb4-49" aria-hidden="true" tabindex="-1"></a>      n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-50"><a href="one-sample-proportion-power-based-sample-size.html#cb4-50" aria-hidden="true" tabindex="-1"></a>      found <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb4-51"><a href="one-sample-proportion-power-based-sample-size.html#cb4-51" aria-hidden="true" tabindex="-1"></a>      <span class="cf">while</span> (<span class="sc">!</span>found <span class="sc">&amp;</span> n <span class="sc">&lt;=</span> <span class="fl">1e+7</span>){</span>
+<span id="cb4-52"><a href="one-sample-proportion-power-based-sample-size.html#cb4-52" aria-hidden="true" tabindex="-1"></a>        n <span class="ot">&lt;-</span> n<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb4-53"><a href="one-sample-proportion-power-based-sample-size.html#cb4-53" aria-hidden="true" tabindex="-1"></a>        pw <span class="ot">&lt;-</span> <span class="fu">eval</span>(p.body)</span>
+<span id="cb4-54"><a href="one-sample-proportion-power-based-sample-size.html#cb4-54" aria-hidden="true" tabindex="-1"></a>        found <span class="ot">&lt;-</span> (pw <span class="sc">&gt;=</span> power) </span>
+<span id="cb4-55"><a href="one-sample-proportion-power-based-sample-size.html#cb4-55" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-56"><a href="one-sample-proportion-power-based-sample-size.html#cb4-56" aria-hidden="true" tabindex="-1"></a>      power <span class="ot">&lt;-</span> pw</span>
+<span id="cb4-57"><a href="one-sample-proportion-power-based-sample-size.html#cb4-57" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb4-58"><a href="one-sample-proportion-power-based-sample-size.html#cb4-58" aria-hidden="true" tabindex="-1"></a>      n <span class="ot">&lt;-</span> <span class="fu">uniroot</span>(<span class="cf">function</span>(n) <span class="fu">eval</span>(p.body) <span class="sc">-</span> power, <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">1e+07</span>), </span>
+<span id="cb4-59"><a href="one-sample-proportion-power-based-sample-size.html#cb4-59" aria-hidden="true" tabindex="-1"></a>                    <span class="at">tol =</span> .Machine<span class="sc">$</span>double.eps<span class="sc">^</span><span class="fl">0.25</span>, <span class="at">extendInt =</span> <span class="st">&quot;upX&quot;</span>)<span class="sc">$</span>root</span>
+<span id="cb4-60"><a href="one-sample-proportion-power-based-sample-size.html#cb4-60" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-61"><a href="one-sample-proportion-power-based-sample-size.html#cb4-61" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-62"><a href="one-sample-proportion-power-based-sample-size.html#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-63"><a href="one-sample-proportion-power-based-sample-size.html#cb4-63" aria-hidden="true" tabindex="-1"></a>  METHOD <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb4-64"><a href="one-sample-proportion-power-based-sample-size.html#cb4-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span>(test, <span class="at">Wald =</span> <span class="st">&quot;Wald z&quot;</span>, <span class="at">score =</span> <span class="st">&quot;Score z&quot;</span>, <span class="at">binomial =</span> <span class="st">&quot;Exact binomial&quot;</span>),</span>
+<span id="cb4-65"><a href="one-sample-proportion-power-based-sample-size.html#cb4-65" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;test power calculation&quot;</span>)</span>
+<span id="cb4-66"><a href="one-sample-proportion-power-based-sample-size.html#cb4-66" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-67"><a href="one-sample-proportion-power-based-sample-size.html#cb4-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">n =</span> n, <span class="at">p0 =</span> p0, <span class="at">p1 =</span> p1, <span class="at">sig.level =</span> sig.level, </span>
+<span id="cb4-68"><a href="one-sample-proportion-power-based-sample-size.html#cb4-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">power =</span> power, <span class="at">alternative =</span> alternative, <span class="at">note =</span> <span class="st">&quot;n is the number of independent samples&quot;</span>, </span>
+<span id="cb4-69"><a href="one-sample-proportion-power-based-sample-size.html#cb4-69" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> METHOD), <span class="at">class =</span> <span class="st">&quot;power.htest&quot;</span>)</span>
+<span id="cb4-70"><a href="one-sample-proportion-power-based-sample-size.html#cb4-70" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-71"><a href="one-sample-proportion-power-based-sample-size.html#cb4-71" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="getting-inputs-worstbest-case-scenarios-1" class="section level2 hasAnchor" number="3.4">
@@ -378,6 +400,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="functions-in-r-packages-2" class="section level2 hasAnchor" number="3.7">
 <h2><span class="header-section-number">3.7</span> Functions in R packages<a href="one-sample-proportion-power-based-sample-size.html#functions-in-r-packages-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
+<div id="refs" class="references csl-bib-body">
+<div class="csl-entry">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Lenz A, Haynes AG, Limacher A. <em>Presize: Precision Based Sample Size Calculation</em>.; 2022. <a href="https://CRAN.R-project.org/package=presize">https://CRAN.R-project.org/package=presize</a></div>
+</div>
+<div class="csl-entry">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Haynes AG, Lenz A, Stalder O, Limacher A. ‘Presize‘: An <span>R</span>-package for precision-based sample size calculation in clinical research. <em>Journal of Open Source Software</em>. 2021;6(60):3118. doi:<a href="https://doi.org/10.21105/joss.03118">10.21105/joss.03118</a></div>
+</div>
+</div>
 </div>
 </div>
             </section>

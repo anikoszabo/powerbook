@@ -1,5 +1,3 @@
-tab:oneprop-rejection
-tab:oneprop-power
 one-sample-mean
 example
 data-generating-mechanism
@@ -16,7 +14,7 @@ example-1
 data-generating-mechanism-1
 precision-measures
 standard-error
-confidence-interval-or-margin-of-error
+confidence-interval
 getting-inputs-worstbest-case-scenarios
 example-revisited-1
 simulation-study-1

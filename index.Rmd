@@ -10,6 +10,7 @@ url: https://anikoszabo.github.io/powerbook
 description: |
   This is a reference book for power and sample size calculations using R
 link-citations: yes
+csl: ama.csl
 github-repo: anikoszabo/powerbook
 ---
 
