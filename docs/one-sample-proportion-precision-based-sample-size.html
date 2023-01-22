@@ -23,7 +23,7 @@
 <meta name="author" content="Aniko Szabo" />
 
 
-<meta name="date" content="2023-01-07" />
+<meta name="date" content="2023-01-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -186,8 +186,8 @@ div.csl-indent {
 <li class="chapter" data-level="2.3.2" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#confidence-interval"><i class="fa fa-check"></i><b>2.3.2</b> Confidence interval</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#getting-inputs-worstbest-case-scenarios"><i class="fa fa-check"></i><b>2.4</b> Getting inputs, worst/best case scenarios</a></li>
-<li class="chapter" data-level="2.5" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#example-revisited-1"><i class="fa fa-check"></i><b>2.5</b> Example revisited</a></li>
-<li class="chapter" data-level="2.6" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#simulation-study-1"><i class="fa fa-check"></i><b>2.6</b> Simulation study</a></li>
+<li class="chapter" data-level="2.5" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#simulation-study-1"><i class="fa fa-check"></i><b>2.5</b> Simulation study</a></li>
+<li class="chapter" data-level="2.6" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#example-revisited-1"><i class="fa fa-check"></i><b>2.6</b> Example revisited</a></li>
 <li class="chapter" data-level="2.7" data-path="one-sample-proportion-precision-based-sample-size.html"><a href="one-sample-proportion-precision-based-sample-size.html#functions-in-r-packages-1"><i class="fa fa-check"></i><b>2.7</b> Functions in R packages</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html"><i class="fa fa-check"></i><b>3</b> One-sample proportion: power-based sample size</a>
@@ -240,8 +240,13 @@ div.csl-indent {
 <h3><span class="header-section-number">2.3.1</span> Standard error<a href="one-sample-proportion-precision-based-sample-size.html#standard-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The standard error of <span class="math inline">\(\hat{p}\)</span> is</p>
 <p><span class="math display">\[\begin{equation}
-SE(\hat{p}) = \sqrt\frac{p(1-p)}{n}
+SE(\hat{p}) = \sqrt\frac{p(1-p)}{n}.
 \end{equation}\]</span></p>
+<p>Solving for <span class="math inline">\(n\)</span>, we have
+<span class="math display">\[\begin{equation}
+n = \frac{p(1-p)}{SE^2},
+\end{equation}\]</span>
+where <span class="math inline">\(SE\)</span> is the targeted standard error of the estimate.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate standard error for given sample size, or vice versa. Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL</span></span>
 <span id="cb1-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; p - expected event probability</span></span>
 <span id="cb1-3"><a href="one-sample-proportion-precision-based-sample-size.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; n - sample size</span></span>
@@ -292,21 +297,129 @@ SE(\hat{p}) = \sqrt\frac{p(1-p)}{n}
 </tbody>
 </table>
 <p>where <span class="math inline">\(\hat{p}_{adj} = \frac{X + 0.5z_*^2}{n + z_*^2}\)</span>, <span class="math inline">\(b_{\frac{\alpha}{2}; n,p}\)</span> is the upper <span class="math inline">\(\frac{\alpha}{2}\)</span>th quantile of the <span class="math inline">\(Binomial(n,p)\)</span> distribution, <span class="math inline">\(z_* = z_\frac{\alpha}{2}\)</span> denotes the upper <span class="math inline">\(\frac{\alpha}{2}\)</span>th quantile of the standard normal distribution, and <span class="math inline">\((a \pm d)\)</span> is a shorthand for a symmetric confidence interval <span class="math inline">\((a-d, a+d)\)</span> with margin of error <span class="math inline">\(d\)</span>.</p>
-<p>The calculation of the sample size <code>n</code> or the confidence interval width is implemented in the <code>presize</code> R package.<span class="citation"><sup><a href="#ref-R-presize" role="doc-biblioref">1</a>,<a href="#ref-presize2021" role="doc-biblioref">2</a></sup></span></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(presize<span class="sc">::</span>prec_prop)</span></code></pre></div>
+<p>Base R implements the Wilson (<code>prop.test</code> when used with <code>correct=FALSE</code>) and the exact (<code>binom.test</code>) confidence intervals. The other intervals are available in packages, eg the <code>binom</code> package.<span class="citation"><sup><a href="#ref-R-binom" role="doc-biblioref">1</a></sup></span></p>
+<p>The calculation of the sample size <code>n</code> or the confidence interval width is implemented in the <code>presize</code> R package.<span class="citation"><sup><a href="#ref-R-presize" role="doc-biblioref">2</a>,<a href="#ref-presize2021" role="doc-biblioref">3</a></sup></span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(presize)</span>
+<span id="cb2-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(prec_prop)</span></code></pre></div>
 <pre><code>## function (p, n = NULL, conf.width = NULL, conf.level = 0.95, method = c(&quot;wilson&quot;, 
 ##     &quot;agresti-coull&quot;, &quot;exact&quot;, &quot;wald&quot;), ...)</code></pre>
 </div>
 </div>
 <div id="getting-inputs-worstbest-case-scenarios" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Getting inputs, worst/best case scenarios<a href="one-sample-proportion-precision-based-sample-size.html#getting-inputs-worstbest-case-scenarios" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The only input needed is a best guess at <span class="math inline">\(p\)</span>, the proportion to be estimated.</p>
+<p>The inputs needed to calculate the sample size are
+* a best guess at <span class="math inline">\(p\)</span>, the proportion to be estimated
+* the target precision defined as the standard error or confidence interval width</p>
+<p>The following plot shows how the sample size depends on these inputs:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set vector of &#39;p&#39; &amp; &#39;se&#39; values to explore</span></span>
+<span id="cb4-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-2" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="fl">0.99</span>, <span class="at">by=</span><span class="fl">0.01</span>)</span>
+<span id="cb4-3"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-3" aria-hidden="true" tabindex="-1"></a>s0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.05</span>, <span class="fl">0.025</span>)</span>
+<span id="cb4-4"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data set with varying &#39;p&#39; and &#39;se&#39;</span></span>
+<span id="cb4-5"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-5" aria-hidden="true" tabindex="-1"></a>se_settings <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">p =</span> p0, <span class="at">se =</span> s0)</span>
+<span id="cb4-6"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate &#39;n&#39; for each combination</span></span>
+<span id="cb4-7"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-7" aria-hidden="true" tabindex="-1"></a>se_settings <span class="ot">&lt;-</span> <span class="fu">transform</span>(se_settings, <span class="at">n =</span> <span class="fu">se_prop</span>(<span class="at">p=</span>p, <span class="at">se=</span>se)<span class="sc">$</span>n)</span>
+<span id="cb4-8"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-10"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(se_settings,</span>
+<span id="cb4-11"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> p, <span class="at">y =</span> n, <span class="at">color =</span> <span class="fu">factor</span>(se), <span class="at">group =</span> se)) <span class="sc">+</span></span>
+<span id="cb4-12"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-13"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">&quot;Standard error &#39;se&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Event probability &#39;p&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Sample size &#39;n&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="one-sample-proportion-precision-based-sample-size.html#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sample size required to achieve target standard error&quot;</span>)</span></code></pre></div>
+<p><img src="B_01_one_prop_prec_files/figure-html/OneProp_SEPlot-1.png" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set vector of CI width values and CI methods to explore</span></span>
+<span id="cb5-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-2" aria-hidden="true" tabindex="-1"></a>w0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.1</span>, <span class="fl">0.05</span>)</span>
+<span id="cb5-3"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-3" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;agresti-coull&quot;</span>,<span class="st">&quot;wald&quot;</span>, <span class="st">&quot;wilson&quot;</span>,<span class="st">&quot;exact&quot;</span>)</span>
+<span id="cb5-4"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data set with varying &#39;p&#39; and &#39;w&#39;</span></span>
+<span id="cb5-5"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-5" aria-hidden="true" tabindex="-1"></a>ci_settings <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">p =</span> p0, <span class="at">w =</span> w0, <span class="at">Method=</span>m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-6"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate &#39;n&#39; for each combination</span></span>
+<span id="cb5-7"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># prec_prop is not vectorized for this calculation</span></span>
+<span id="cb5-8"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-8" aria-hidden="true" tabindex="-1"></a>ci_settings<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(ci_settings),</span>
+<span id="cb5-9"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-9" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(idx) <span class="fu">with</span>(ci_settings, </span>
+<span id="cb5-10"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="fu">prec_prop</span>(<span class="at">p=</span>p[idx], </span>
+<span id="cb5-11"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-11" aria-hidden="true" tabindex="-1"></a>                                                 <span class="at">conf.width =</span> w[idx],</span>
+<span id="cb5-12"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-12" aria-hidden="true" tabindex="-1"></a>                                                 <span class="at">method =</span> Method[idx])<span class="sc">$</span>n))</span>
+<span id="cb5-13"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ci_settings,</span>
+<span id="cb5-15"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> p, <span class="at">y =</span> n, <span class="at">color =</span> <span class="fu">factor</span>(w), <span class="at">linetype =</span> Method, </span>
+<span id="cb5-16"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">group =</span> <span class="fu">interaction</span>(w, Method))) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb5-18"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">&quot;95% CI width &#39;w&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-19"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Event probability &#39;p&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-20"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Sample size &#39;n&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-21"><a href="one-sample-proportion-precision-based-sample-size.html#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sample size required to achieve target width of 95% CI&quot;</span>) </span></code></pre></div>
+<p><img src="B_01_one_prop_prec_files/figure-html/OneProp_CIPlot-1.png" width="672" /></p>
+<p>The following is evident from the plots (and the binomial variance formula):</p>
+<ul>
+<li><p>The largest sample size is needed for <span class="math inline">\(p=0.5\)</span>. If there is no a-prior information about the expected event probability, using the worst-case value of <span class="math inline">\(p=0.5\)</span> in the calculations ensures that the target precision is reached (or exceeded) regardless of the true value.</p></li>
+<li><p>The required sample size decreases as we move away from <span class="math inline">\(p=0.5\)</span> toward either end of the range. So if we can bound that expected event probability away from 0.5, ie <span class="math inline">\(p &lt; p_L &lt; 0.5\)</span> or <span class="math inline">\(p &gt; p_H &gt; 0.5\)</span>, then we can use <span class="math inline">\(p_L\)</span> or <span class="math inline">\(p_H\)</span> in the calculations, and ensure that the target precision is reached (or exceeded) for any true value below <span class="math inline">\(p_L\)</span> (or above <span class="math inline">\(p_H\)</span>).</p></li>
+<li><p>The exact confidence interval method requires the largest sample size. The other methods give very similar results unless <span class="math inline">\(p\)</span> is very close to 0 and 1.</p></li>
+</ul>
 </div>
-<div id="example-revisited-1" class="section level2 hasAnchor" number="2.5">
-<h2><span class="header-section-number">2.5</span> Example revisited<a href="one-sample-proportion-precision-based-sample-size.html#example-revisited-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="simulation-study-1" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Simulation study<a href="one-sample-proportion-precision-based-sample-size.html#simulation-study-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The simulation studies are set up to show how the actual confidence interval widths vary from the target values using the ‘n’ values computed above.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(binom)</span>
+<span id="cb6-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create simulation settings with fewer values for &#39;p&#39; than in the plot </span></span>
+<span id="cb6-3"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-3" aria-hidden="true" tabindex="-1"></a>sim_settings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb6-4"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(<span class="at">p =</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="at">by=</span><span class="fl">0.05</span>),</span>
+<span id="cb6-5"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">precision =</span> s0,</span>
+<span id="cb6-6"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;SE&quot;</span>, </span>
+<span id="cb6-7"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb6-8"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(<span class="at">p =</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="at">by=</span><span class="fl">0.05</span>),</span>
+<span id="cb6-9"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">precision =</span> w0,</span>
+<span id="cb6-10"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> m0, </span>
+<span id="cb6-11"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb6-12"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># function that, given &#39;p&#39;, method and planned sample size, simulates data &#39;R&#39; times and </span></span>
+<span id="cb6-14"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># computes the relevant confidence interval width</span></span>
+<span id="cb6-15"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># output is data frame with one row per simulation</span></span>
+<span id="cb6-16"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-16" aria-hidden="true" tabindex="-1"></a>sim_se_ci <span class="ot">&lt;-</span> <span class="cf">function</span>(precision, p, method, <span class="at">R=</span><span class="dv">1000</span>){</span>
+<span id="cb6-17"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>){</span>
+<span id="cb6-18"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-18" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">se_prop</span>(<span class="at">p=</span>p, <span class="at">se=</span>precision)<span class="sc">$</span>n</span>
+<span id="cb6-19"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-19" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb6-20"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-20" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">prec_prop</span>(<span class="at">p=</span>p, <span class="at">conf.width=</span>precision, <span class="at">method =</span> method)<span class="sc">$</span>n</span>
+<span id="cb6-21"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-22"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-23"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># round up</span></span>
+<span id="cb6-24"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-24" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(n)</span>
+<span id="cb6-25"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-26"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simulate data as binomial sum</span></span>
+<span id="cb6-27"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-27" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(R, <span class="at">size=</span>n, <span class="at">prob=</span>p)</span>
+<span id="cb6-28"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-29"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>){</span>
+<span id="cb6-30"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-30" aria-hidden="true" tabindex="-1"></a>    phat <span class="ot">&lt;-</span> x<span class="sc">/</span>n</span>
+<span id="cb6-31"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-31" aria-hidden="true" tabindex="-1"></a>    se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(phat <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>phat) <span class="sc">/</span> n)</span>
+<span id="cb6-32"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-32" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">p =</span> p, <span class="at">target =</span> precision, <span class="at">method =</span> <span class="st">&quot;SE&quot;</span>, <span class="at">n=</span>n, <span class="at">precision =</span> se)</span>
+<span id="cb6-33"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-33" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb6-34"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-34" aria-hidden="true" tabindex="-1"></a>    bmeth <span class="ot">&lt;-</span> <span class="cf">if</span> (method<span class="sc">==</span><span class="st">&quot;wald&quot;</span>) <span class="st">&quot;asymptotic&quot;</span> <span class="cf">else</span> method</span>
+<span id="cb6-35"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-35" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">binom.confint</span>(<span class="at">x=</span>x, <span class="at">n=</span>n, <span class="at">methods=</span>bmeth)</span>
+<span id="cb6-36"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-36" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">p =</span> p, <span class="at">target =</span> precision, <span class="at">method =</span> method, <span class="at">n=</span>n, </span>
+<span id="cb6-37"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-37" aria-hidden="true" tabindex="-1"></a>                 <span class="at">precision =</span> df<span class="sc">$</span>upper <span class="sc">-</span> df<span class="sc">$</span>lower)</span>
+<span id="cb6-38"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-38" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-39"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-39" aria-hidden="true" tabindex="-1"></a>  res</span>
+<span id="cb6-40"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-41"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co"># run simulation for each value of the grid</span></span>
+<span id="cb6-43"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20576</span>)</span>
+<span id="cb6-44"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-44" aria-hidden="true" tabindex="-1"></a>sim_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sim_settings),</span>
+<span id="cb6-45"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-45" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(idx) <span class="fu">with</span>(sim_settings,</span>
+<span id="cb6-46"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-46" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">sim_se_ci</span>(<span class="at">precision =</span> precision[idx], </span>
+<span id="cb6-47"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-47" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">p =</span> p[idx],</span>
+<span id="cb6-48"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-48" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">method=</span>method[idx])))</span>
+<span id="cb6-49"><a href="one-sample-proportion-precision-based-sample-size.html#cb6-49" aria-hidden="true" tabindex="-1"></a>sim_res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, sim_list)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim_res, <span class="fu">aes</span>(<span class="at">x=</span>p, <span class="at">y=</span>precision, <span class="at">color =</span> <span class="fu">factor</span>(target))) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>method) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> precision, <span class="at">color=</span><span class="fu">factor</span>(precision)), <span class="at">data=</span>sim_settings) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="fu">interaction</span>(p, target)), <span class="at">outlier.size =</span> <span class="dv">1</span>, <span class="at">outlier.alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">&quot;Targeted precision&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Event probability &#39;p&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="one-sample-proportion-precision-based-sample-size.html#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Simulated precision&quot;</span>)</span></code></pre></div>
+<p><img src="B_01_one_prop_prec_files/figure-html/OnePropSim_Plot-1.png" width="672" /></p>
 </div>
-<div id="simulation-study-1" class="section level2 hasAnchor" number="2.6">
-<h2><span class="header-section-number">2.6</span> Simulation study<a href="one-sample-proportion-precision-based-sample-size.html#simulation-study-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="example-revisited-1" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Example revisited<a href="one-sample-proportion-precision-based-sample-size.html#example-revisited-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
 <div id="functions-in-r-packages-1" class="section level2 hasAnchor" number="2.7">
 <h2><span class="header-section-number">2.7</span> Functions in R packages<a href="one-sample-proportion-precision-based-sample-size.html#functions-in-r-packages-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -315,11 +428,14 @@ SE(\hat{p}) = \sqrt\frac{p(1-p)}{n}
 </div>
 <h3>References</h3>
 <div id="refs" class="references csl-bib-body">
+<div id="ref-R-binom" class="csl-entry">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Dorai-Raj S. <em>Binom: Binomial Confidence Intervals for Several Parameterizations</em>.; 2022. <a href="https://CRAN.R-project.org/package=binom">https://CRAN.R-project.org/package=binom</a></div>
+</div>
 <div id="ref-R-presize" class="csl-entry">
-<div class="csl-left-margin">1. </div><div class="csl-right-inline">Lenz A, Haynes AG, Limacher A. <em>Presize: Precision Based Sample Size Calculation</em>.; 2022. <a href="https://CRAN.R-project.org/package=presize">https://CRAN.R-project.org/package=presize</a></div>
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Lenz A, Haynes AG, Limacher A. <em>Presize: Precision Based Sample Size Calculation</em>.; 2022. <a href="https://CRAN.R-project.org/package=presize">https://CRAN.R-project.org/package=presize</a></div>
 </div>
 <div id="ref-presize2021" class="csl-entry">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Haynes AG, Lenz A, Stalder O, Limacher A. ‘Presize‘: An <span>R</span>-package for precision-based sample size calculation in clinical research. <em>Journal of Open Source Software</em>. 2021;6(60):3118. doi:<a href="https://doi.org/10.21105/joss.03118">10.21105/joss.03118</a></div>
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Haynes AG, Lenz A, Stalder O, Limacher A. ‘Presize‘: An <span>R</span>-package for precision-based sample size calculation in clinical research. <em>Journal of Open Source Software</em>. 2021;6(60):3118. doi:<a href="https://doi.org/10.21105/joss.03118">10.21105/joss.03118</a></div>
 </div>
 </div>
             </section>

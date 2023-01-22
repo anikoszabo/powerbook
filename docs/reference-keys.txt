@@ -16,8 +16,8 @@ precision-measures
 standard-error
 confidence-interval
 getting-inputs-worstbest-case-scenarios
-example-revisited-1
 simulation-study-1
+example-revisited-1
 functions-in-r-packages-1
 one-sample-proportion-power-based-sample-size
 example-2
