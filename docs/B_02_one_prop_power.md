@@ -56,9 +56,13 @@ where $F_{B(n,p)}$ is the cdf of the $Binomial(n,p)$ distribution, and $\Phi$ is
 #' sig.level - significance level of test
 #' alternative - type of alternative hypothesis
 #' test - type of test
-power.1prop.test <- function(p0, p1, n=NULL, power=NULL, sig.level=0.05, 
-                             alternative=c("less","greater","two.sided"),
+power.1prop.test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05, 
+                             alternative=c("two.sided","less","greater"),
                              test = c("Wald","score","binomial")){
+  if (is.null(power) + is.null(n) != 1){
+    stop("Exactly one of 'n' and 'power' should be non-NULL")
+  }
+    
   alternative <- match.arg(alternative)
   sides <- ifelse(alternative=="two.sided", 2, 1)
   
@@ -67,14 +71,14 @@ power.1prop.test <- function(p0, p1, n=NULL, power=NULL, sig.level=0.05,
   if (test == "binomial"){
     p.body.up <- quote({
       ba <- qbinom(sig.level/sides, size = n, prob=p0, lower.tail=FALSE)
-      pbinom(ba, size=n, prob=p1, lower.tail = FALSE)})
+      pbinom(ba, size=n, prob=p, lower.tail = FALSE)})
     p.body.lo <- quote({
       ba <- qbinom(sig.level/sides, size = n, prob=p0, lower.tail=TRUE)
-      pbinom(ba, size=n, prob=p1, lower.tail = TRUE)})
+      pbinom(ba-1, size=n, prob=p, lower.tail = TRUE)})
   } else {
     za <- qnorm(sig.level/sides, lower.tail = FALSE)
-    vratio <- if (test == "score"){ sqrt(p0 * (1-p0) / (p1 * (1-p1)))} else 1
-    delta <- (p0 - p1)/sqrt(p1*(1-p1)) 
+    vratio <- if (test == "score"){ sqrt(p0 * (1-p0) / (p * (1-p)))} else 1
+    delta <- (p0 - p)/sqrt(p*(1-p)) 
     
     p.body.up  <- quote({
       pnorm(za * vratio + delta * sqrt(n), lower.tail = FALSE)
@@ -105,8 +109,13 @@ power.1prop.test <- function(p0, p1, n=NULL, power=NULL, sig.level=0.05,
       }
       power <- pw
     } else {
-      n <- uniroot(function(n) eval(p.body) - power, c(2, 1e+07), 
+      f <- function(n) {eval(p.body) - power}
+      if (f(1) > 0){
+        n <- 1
+      } else {
+        n <- uniroot(f, c(1, 1e+07), 
                     tol = .Machine$double.eps^0.25, extendInt = "upX")$root
+      }
     }
   }
 
@@ -114,7 +123,7 @@ power.1prop.test <- function(p0, p1, n=NULL, power=NULL, sig.level=0.05,
     switch(test, Wald = "Wald z", score = "Score z", binomial = "Exact binomial"),
     "test power calculation")
     
-  structure(list(n = n, p0 = p0, p1 = p1, sig.level = sig.level, 
+  structure(list(n = n, p0 = p0, p = p, sig.level = sig.level, 
         power = power, alternative = alternative, note = "n is the number of independent samples", 
         method = METHOD), class = "power.htest")
   
@@ -122,6 +131,49 @@ power.1prop.test <- function(p0, p1, n=NULL, power=NULL, sig.level=0.05,
 ```
 
 ## Getting inputs, worst/best case scenarios
+
+
+The inputs needed to calculate the sample size are 
+
+  * a best guess at $p$, the true value of the proportion to be tested
+  * the desired power of the study
+  
+The following plot shows how the sample size depends on these inputs:   
+
+
+```r
+# set vector of 'p0', 'p' & 'power' values to explore
+p0 <- c(0.2, 0.5, 0.8)
+p1 <- seq(0.01, 0.99, by=0.01) 
+pw0 <- c(0.8, 0.95)
+m0 <- c("Wald", "score", "binomial")
+# Data set with varying 'p' and 'power'
+pw_settings <- expand.grid(p = p1, p0=p0, power = pw0, method = m0,
+                           stringsAsFactors = FALSE)
+# Calculate 'n' for each combination
+pw_settings$n <- sapply(1:nrow(pw_settings), 
+  function(idx) 
+    with(pw_settings,
+         {if(p[idx] == p0[idx]) Inf else  
+          power.1prop.test(p=p[idx], p0=p0[idx], power=power[idx],
+                          test=method[idx])$n}))
+
+library(ggplot2)
+ggplot(pw_settings,
+       aes(x = p, y = n, linetype = factor(power), color = method)) +
+  facet_wrap(~p0) +
+  geom_line() +
+  geom_vline(aes(xintercept = p0)) +
+  scale_color_discrete("Test") +
+  scale_linetype_discrete("Target power") +
+  xlab("Event probability 'p'") +
+  ylab("Sample size 'n'") +
+  ggtitle("Sample size required to achieve target standard error") +
+  scale_y_log10() +
+  theme(legend.position = "top")
+```
+
+<img src="B_02_one_prop_power_files/figure-html/OneProp_PowerPlot-1.png" width="672" />
 
 ## Example revisited 
 

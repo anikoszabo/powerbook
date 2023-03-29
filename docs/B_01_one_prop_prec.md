@@ -78,6 +78,7 @@ str(prec_prop)
 ## Getting inputs, worst/best case scenarios
 
 The inputs needed to calculate the sample size are 
+
   * a best guess at $p$, the proportion to be estimated
   * the target precision defined as the standard error or confidence interval width
   
