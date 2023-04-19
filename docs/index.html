@@ -23,7 +23,7 @@
 <meta name="author" content="Aniko Szabo" />
 
 
-<meta name="date" content="2023-03-29" />
+<meta name="date" content="2023-04-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -158,7 +158,14 @@ div.csl-indent {
 <li><a href="./">Power and Sample Size Manual</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#guiding-principles"><i class="fa fa-check"></i>Guiding principles</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#basic-approach"><i class="fa fa-check"></i>Basic approach</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#coding-style"><i class="fa fa-check"></i>Coding style</a></li>
+</ul></li>
+</ul></li>
 <li class="part"><span><b>I Analyzing population means</b></span></li>
 <li class="chapter" data-level="1" data-path="one-sample-mean-precision-based-sample-size.html"><a href="one-sample-mean-precision-based-sample-size.html"><i class="fa fa-check"></i><b>1</b> One-sample mean: precision-based sample size</a>
 <ul>
@@ -228,13 +235,46 @@ div.csl-indent {
 <div id="header">
 <h1 class="title">Power and Sample Size Manual</h1>
 <p class="author"><em>Aniko Szabo</em></p>
-<p class="date"><em>2023-03-29</em></p>
+<p class="date"><em>2023-04-19</em></p>
 </div>
 <div id="welcome" class="section level1 unnumbered hasAnchor">
 <h1>Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This repository is for a <a href="https://bookdown.org/">Bookdown</a> version of a reference book for power and sample size calculations using R.</p>
 <p>It is very much a work in progress, and fixes/contributions in the form of pull requests are welcome.</p>
+<div id="guiding-principles" class="section level2 unnumbered hasAnchor">
+<h2>Guiding principles<a href="index.html#guiding-principles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="basic-approach" class="section level3 unnumbered hasAnchor">
+<h3>Basic approach<a href="index.html#basic-approach" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Each section describes the data assumptions, the statistical analysis methods (eg hypothesis test), and the sample size/power calculation formula or approach.</p></li>
+<li><p>R code or reference is provided for each analysis method and sample size calculation.</p></li>
+<li><p>There is a worked example of a typical sample size calculation with this method.</p></li>
+<li><p>The dependence of the power/sample size on the input parameters is visualized and discussed.</p></li>
+<li><p>At least two simulation studies are included: one validating the analysis method (eg coverage for confidence intervals, type I error for tests), and one validating the sample size calculation.</p></li>
+</ul>
+</div>
+<div id="coding-style" class="section level3 unnumbered hasAnchor">
+<h3>Coding style<a href="index.html#coding-style" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Use base R to the extent possible. The exceptions are:</p>
+<ul>
+<li>packages implementing sample size / power calculations</li>
+<li>{ggplot2} for plotting</li>
+</ul></li>
+<li><p>Use consistent naming conventions. Each section has a unique descriptive label (referred to as XX below) that is used in function names.</p></li>
+<li><p>If multiple analysis approaches are possible, a wrapper function with options for the methods is provided. The function is called <code>XX_test</code> for hypothesis tests, and returns an object of class <code>htest</code>.</p></li>
+<li><p>If multiple sample size approaches are possible, a wrapper function is provided. To the extent possible both calculating power for a given sample size, and the sample size for a given power are implemented. The function is called <code>power_XX_test</code> for hypothesis tests, and returns an object of class <code>power.htest</code>.</p></li>
+<li><p>Simulation studies implement the following steps as separate functions to enable easy modification:</p>
+<ul>
+<li>A function named <code>sim_XX_data</code> to generate random data for a fixed set of parameters.</li>
+<li>A function named <code>analyze_XX_sim</code> to analyze one generated data set that produces the summary statistic(s) of interest.</li>
+<li>A function named <code>run_XX_sim</code> to loop through multiple settings for parameters that produces one dataset with all the results.</li>
+<li>The creation of simulation settings and the display of the simulation results can be in free code.</li>
+</ul></li>
+</ul>
 
+</div>
+</div>
 </div>
 
 
