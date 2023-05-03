@@ -32,12 +32,69 @@ There are three commonly used tests:
  
 where $b_{\alpha; n,p_0}$ is the upper $\alpha$th quantile of the $Binomial(n,p_0)$ distribution, and $z_{\alpha}$ is the upper $\alpha$th quantile of the $N(0,1)$ distribution.
 
-The exact binomial test is implemented in R in `binom.test`, the Wald test in `prop.test` (with or without continuity correction). The score test is not implemented in base R. The following function implements them in a unified framework to simplify the simulation study.
+The exact binomial test is implemented in R in `binom.test`, the score test in `prop.test` (with or without continuity correction). The Wald test is not implemented in base R. The following function implements them in a unified framework to simplify the simulation study, without the option for continuity correction (see, for example, http://www.how2stats.net/2011/09/yates-correction.html for an explanation).
+
+<!-- Thompson, B. (1988). Misuse of chi-square contingency-table test statistics. Educational and Psychological Research, 8(1), 39-49. -->
 
 
 ```r
-one_prop_test <- function(x, n, p0, method = c("binomial", "Wald","Score")){
+# alternative
+# conf.level
+# correct=FALSE
+# suppresses warnings, changes chi-squared to Z in the Wald test output
+one_prop_test <- function(x, n, p0, method = c("binomial", "Wald","score"), 
+                          alternative = c("two.sided", "less",  "greater"), 
+                          conf.level = 0.95){
+  if (length(x) !=1 | length(n) != 1 | length(p0) != 1)
+      stop("x, n, and p0 all should be scalars, not vectors")
   
+  method <- match.arg(method)
+  alternative <- match.arg(alternative)
+  
+  if (method == "binomial"){
+    res <- binom.test(x=x, n=n, p=p0, alternative=alternative, conf.level=conf.level)
+  } else
+  if (method %in% c("Wald", "score")){
+    suppressWarnings(
+      res <- prop.test(x=x, n=n, p=p0, alternative=alternative, conf.level=conf.level,
+                       correct = FALSE))
+    phat <- res$estimate
+     
+    if (method == "score"){
+      z.sign <- sign(phat - p0)
+      Z <- z.sign * sqrt(res$statistic)
+      names(Z) <- "Z"
+      res$statistic <- Z
+      res$parameter <- NULL
+      res$method <- "1-sample proportions score test"
+    } else {  #Wald
+      Z <- (phat - p0) *sqrt(n) / sqrt(phat*(1-phat))
+      names(Z) <- "Z"
+      # p-value
+      pval <- switch(alternative,
+                     two.sided = pnorm(abs(Z), lower.tail = FALSE) * 2,
+                     greater = pnorm(Z, lower.tail = FALSE),
+                     less = pnorm(Z, lower.tail = TRUE))
+      # confidence interval
+      za <- qnorm(if (alternative == "two.sided") 
+            (1 + conf.level)/2
+        else conf.level)
+      ci.half <- za * sqrt(phat*(1-phat)/n)
+      p.u <- phat + ci.half
+      p.l <- phat - ci.half
+      CINT <- switch(alternative, 
+                     two.sided = c(max(p.l, 0), min(p.u, 1)), 
+                     greater = c(max(p.l, 0), 1), 
+                     less = c(0, min(p.u, 1)))
+     # change recalculated parts
+      res$statistic <- Z
+      res$parameter <- NULL
+      res$p.value <- pval
+      res$conf.int <- CINT
+      res$method <- "1-sample proportions Wald test"
+    }
+  }  
+  return(res)
 }
 ```
 
