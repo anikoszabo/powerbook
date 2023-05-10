@@ -23,7 +23,7 @@
 <meta name="author" content="Aniko Szabo" />
 
 
-<meta name="date" content="2023-05-03" />
+<meta name="date" content="2023-05-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,7 +210,10 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#getting-inputs-worstbest-case-scenarios-1"><i class="fa fa-check"></i><b>3.4</b> Getting inputs, worst/best case scenarios</a></li>
 <li class="chapter" data-level="3.5" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#example-revisited-2"><i class="fa fa-check"></i><b>3.5</b> Example revisited</a></li>
-<li class="chapter" data-level="3.6" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#simulation-study-2"><i class="fa fa-check"></i><b>3.6</b> Simulation study</a></li>
+<li class="chapter" data-level="3.6" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#simulation-studies"><i class="fa fa-check"></i><b>3.6</b> Simulation studies</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#achieved-power"><i class="fa fa-check"></i><b>3.6.1</b> Achieved power</a></li>
+</ul></li>
 <li class="chapter" data-level="3.7" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#functions-in-r-packages-2"><i class="fa fa-check"></i><b>3.7</b> Functions in R packages</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -235,7 +238,7 @@ div.csl-indent {
 <div id="header">
 <h1 class="title">Power and Sample Size Manual</h1>
 <p class="author"><em>Aniko Szabo</em></p>
-<p class="date"><em>2023-05-03</em></p>
+<p class="date"><em>2023-05-10</em></p>
 </div>
 <div id="welcome" class="section level1 unnumbered hasAnchor">
 <h1>Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -266,11 +269,13 @@ div.csl-indent {
 <li><p>If multiple sample size approaches are possible, a wrapper function is provided. To the extent possible both calculating power for a given sample size, and the sample size for a given power are implemented. The function is called <code>power_XX_test</code> for hypothesis tests, and returns an object of class <code>power.htest</code>.</p></li>
 <li><p>Simulation studies implement the following steps as separate functions to enable easy modification:</p>
 <ul>
-<li>A function named <code>sim_XX_data</code> to generate random data for a fixed set of parameters.</li>
-<li>A function named <code>analyze_XX_sim</code> to analyze one generated data set that produces the summary statistic(s) of interest.</li>
+<li>A function named <code>sim_XX_data</code> to generate multiple random data sets for a fixed set of parameters.</li>
+<li>A function named <code>analyze_XX_sim</code> to analyze the simulated data that produces the summary statistic(s) of interest for each replicate.</li>
 <li>A function named <code>run_XX_sim</code> to loop through multiple settings for parameters that produces one dataset with all the results.</li>
 <li>The creation of simulation settings and the display of the simulation results can be in free code.</li>
 </ul></li>
+<li><p>All new functions have Roxygen-style documentation</p></li>
+<li><p>A simulation seed is set immediately before any code with randomness, so it can be reproduced as a stand-alone simulation</p></li>
 </ul>
 
 </div>

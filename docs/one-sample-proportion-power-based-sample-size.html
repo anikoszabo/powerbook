@@ -23,7 +23,7 @@
 <meta name="author" content="Aniko Szabo" />
 
 
-<meta name="date" content="2023-05-03" />
+<meta name="date" content="2023-05-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,7 +210,10 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#getting-inputs-worstbest-case-scenarios-1"><i class="fa fa-check"></i><b>3.4</b> Getting inputs, worst/best case scenarios</a></li>
 <li class="chapter" data-level="3.5" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#example-revisited-2"><i class="fa fa-check"></i><b>3.5</b> Example revisited</a></li>
-<li class="chapter" data-level="3.6" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#simulation-study-2"><i class="fa fa-check"></i><b>3.6</b> Simulation study</a></li>
+<li class="chapter" data-level="3.6" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#simulation-studies"><i class="fa fa-check"></i><b>3.6</b> Simulation studies</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#achieved-power"><i class="fa fa-check"></i><b>3.6.1</b> Achieved power</a></li>
+</ul></li>
 <li class="chapter" data-level="3.7" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#functions-in-r-packages-2"><i class="fa fa-check"></i><b>3.7</b> Functions in R packages</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -392,9 +395,9 @@ div.csl-indent {
 <span id="cb19-6"><a href="one-sample-proportion-power-based-sample-size.html#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; sig.level - significance level of test</span></span>
 <span id="cb19-7"><a href="one-sample-proportion-power-based-sample-size.html#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; alternative - type of alternative hypothesis</span></span>
 <span id="cb19-8"><a href="one-sample-proportion-power-based-sample-size.html#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; test - type of test</span></span>
-<span id="cb19-9"><a href="one-sample-proportion-power-based-sample-size.html#cb19-9" aria-hidden="true" tabindex="-1"></a>power<span class="fl">.1</span>prop.test <span class="ot">&lt;-</span> <span class="cf">function</span>(p, p0, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">power=</span><span class="cn">NULL</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, </span>
+<span id="cb19-9"><a href="one-sample-proportion-power-based-sample-size.html#cb19-9" aria-hidden="true" tabindex="-1"></a>power_one_prop_test <span class="ot">&lt;-</span> <span class="cf">function</span>(p, p0, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">power=</span><span class="cn">NULL</span>, <span class="at">sig.level=</span><span class="fl">0.05</span>, </span>
 <span id="cb19-10"><a href="one-sample-proportion-power-based-sample-size.html#cb19-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">alternative=</span><span class="fu">c</span>(<span class="st">&quot;two.sided&quot;</span>,<span class="st">&quot;less&quot;</span>,<span class="st">&quot;greater&quot;</span>),</span>
-<span id="cb19-11"><a href="one-sample-proportion-power-based-sample-size.html#cb19-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test =</span> <span class="fu">c</span>(<span class="st">&quot;Wald&quot;</span>,<span class="st">&quot;score&quot;</span>,<span class="st">&quot;binomial&quot;</span>)){</span>
+<span id="cb19-11"><a href="one-sample-proportion-power-based-sample-size.html#cb19-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">test =</span> <span class="fu">c</span>(<span class="st">&quot;binomial&quot;</span>,<span class="st">&quot;Wald&quot;</span>,<span class="st">&quot;score&quot;</span>)){</span>
 <span id="cb19-12"><a href="one-sample-proportion-power-based-sample-size.html#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(power) <span class="sc">+</span> <span class="fu">is.null</span>(n) <span class="sc">!=</span> <span class="dv">1</span>){</span>
 <span id="cb19-13"><a href="one-sample-proportion-power-based-sample-size.html#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Exactly one of &#39;n&#39; and &#39;power&#39; should be non-NULL&quot;</span>)</span>
 <span id="cb19-14"><a href="one-sample-proportion-power-based-sample-size.html#cb19-14" aria-hidden="true" tabindex="-1"></a>  }</span>
@@ -487,7 +490,7 @@ div.csl-indent {
 <span id="cb20-11"><a href="one-sample-proportion-power-based-sample-size.html#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(idx) </span>
 <span id="cb20-12"><a href="one-sample-proportion-power-based-sample-size.html#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with</span>(pw_settings,</span>
 <span id="cb20-13"><a href="one-sample-proportion-power-based-sample-size.html#cb20-13" aria-hidden="true" tabindex="-1"></a>         {<span class="cf">if</span>(p[idx] <span class="sc">==</span> p0[idx]) <span class="cn">Inf</span> <span class="cf">else</span>  </span>
-<span id="cb20-14"><a href="one-sample-proportion-power-based-sample-size.html#cb20-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">power.1prop.test</span>(<span class="at">p=</span>p[idx], <span class="at">p0=</span>p0[idx], <span class="at">power=</span>power[idx],</span>
+<span id="cb20-14"><a href="one-sample-proportion-power-based-sample-size.html#cb20-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">power_one_prop_test</span>(<span class="at">p=</span>p[idx], <span class="at">p0=</span>p0[idx], <span class="at">power=</span>power[idx],</span>
 <span id="cb20-15"><a href="one-sample-proportion-power-based-sample-size.html#cb20-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">test=</span>method[idx])<span class="sc">$</span>n}))</span>
 <span id="cb20-16"><a href="one-sample-proportion-power-based-sample-size.html#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-17"><a href="one-sample-proportion-power-based-sample-size.html#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -508,60 +511,58 @@ div.csl-indent {
 <div id="example-revisited-2" class="section level2 hasAnchor" number="3.5">
 <h2><span class="header-section-number">3.5</span> Example revisited<a href="one-sample-proportion-power-based-sample-size.html#example-revisited-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="simulation-study-2" class="section level2 hasAnchor" number="3.6">
-<h2><span class="header-section-number">3.6</span> Simulation study<a href="one-sample-proportion-power-based-sample-size.html#simulation-study-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The simulation study explores how the achieved power lines up with the design power using the sample size calculations.</p>
-<!---
-
-
-```r
-# create simulation settings with fewer values for 'p' than in the plot 
-sim_settings <- 
-  expand.grid(p = seq(0.05, 0.95, by=0.05),
-              p0= c(0.2, 0.5),
-              method = m0, 
-              stringsAsFactors = FALSE)
-
-# function that, given 'p', 'p0', method and planned sample size, simulates data 'R' times and 
-# computes the p-value of the test
-# output is data frame with one row per simulation
-sim_pw <- function(p, p0, method, R=1000){
-  if (method == "SE"){
-    n <- se_prop(p=p, se=precision)$n
-  } else {
-    n <- prec_prop(p=p, conf.width=precision, method = method)$n
-  }
-  
-  # round up
-  n <- ceiling(n)
-  
-  # simulate data as binomial sum
-  x <- rbinom(R, size=n, prob=p)
-  
-  if (method == "SE"){
-    phat <- x/n
-    se <- sqrt(phat * (1-phat) / n)
-    res <- data.frame(p = p, target = precision, method = "SE", n=n, precision = se)
-  } else {
-    bmeth <- if (method=="wald") "asymptotic" else method
-    df <- binom.confint(x=x, n=n, methods=bmeth)
-    res <- data.frame(p = p, target = precision, method = method, n=n, 
-                 precision = df$upper - df$lower)
-  }
-  res
-}
-
-# run simulation for each value of the grid
-set.seed(20576)
-sim_list <- lapply(1:nrow(sim_settings),
-                   function(idx) with(sim_settings,
-                                      sim_se_ci(precision = precision[idx], 
-                                                p = p[idx],
-                                                method=method[idx])))
-sim_res <- do.call(rbind, sim_list)
-```
-
--->
+<div id="simulation-studies" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Simulation studies<a href="one-sample-proportion-power-based-sample-size.html#simulation-studies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>First, we define functions that simulate data according to the data generating mechanism, and then apply the tests to each replicate.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="one-sample-proportion-power-based-sample-size.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Simulate binomial data </span></span>
+<span id="cb21-2"><a href="one-sample-proportion-power-based-sample-size.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param p event probability</span></span>
+<span id="cb21-3"><a href="one-sample-proportion-power-based-sample-size.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param n sample size</span></span>
+<span id="cb21-4"><a href="one-sample-proportion-power-based-sample-size.html#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param R number of simulations</span></span>
+<span id="cb21-5"><a href="one-sample-proportion-power-based-sample-size.html#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @returns data frame with R rows with the simulation ID, the simulated number of successes,</span></span>
+<span id="cb21-6"><a href="one-sample-proportion-power-based-sample-size.html#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; &#39;x&#39;, and the sample size &#39;n&#39;</span></span>
+<span id="cb21-7"><a href="one-sample-proportion-power-based-sample-size.html#cb21-7" aria-hidden="true" tabindex="-1"></a>sim_one_prop <span class="ot">&lt;-</span> <span class="cf">function</span>(p, n, <span class="at">R=</span><span class="dv">1</span>){</span>
+<span id="cb21-8"><a href="one-sample-proportion-power-based-sample-size.html#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span>R, </span>
+<span id="cb21-9"><a href="one-sample-proportion-power-based-sample-size.html#cb21-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="fu">rbinom</span>(R, <span class="at">size=</span>n, <span class="at">prob=</span>p), </span>
+<span id="cb21-10"><a href="one-sample-proportion-power-based-sample-size.html#cb21-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">n=</span>n)</span>
+<span id="cb21-11"><a href="one-sample-proportion-power-based-sample-size.html#cb21-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-12"><a href="one-sample-proportion-power-based-sample-size.html#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="one-sample-proportion-power-based-sample-size.html#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Analyze simulated binomial data </span></span>
+<span id="cb21-14"><a href="one-sample-proportion-power-based-sample-size.html#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param simdat output of `sim_one_prop`</span></span>
+<span id="cb21-15"><a href="one-sample-proportion-power-based-sample-size.html#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param p0 the null hypothesis value for the test</span></span>
+<span id="cb21-16"><a href="one-sample-proportion-power-based-sample-size.html#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param ... additional arguments passed to `one_prop_test`</span></span>
+<span id="cb21-17"><a href="one-sample-proportion-power-based-sample-size.html#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @returns data frame with estimate, statistic, and p-value from test for each simulation ID</span></span>
+<span id="cb21-18"><a href="one-sample-proportion-power-based-sample-size.html#cb21-18" aria-hidden="true" tabindex="-1"></a>analyze_one_prop <span class="ot">&lt;-</span> <span class="cf">function</span>(simdat, p0, ...){</span>
+<span id="cb21-19"><a href="one-sample-proportion-power-based-sample-size.html#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># run test on each row</span></span>
+<span id="cb21-20"><a href="one-sample-proportion-power-based-sample-size.html#cb21-20" aria-hidden="true" tabindex="-1"></a>  tst_list <span class="ot">&lt;-</span> <span class="fu">mapply</span>(one_prop_test, <span class="at">x=</span>simdat<span class="sc">$</span>x, <span class="at">n=</span>simdat<span class="sc">$</span>n, </span>
+<span id="cb21-21"><a href="one-sample-proportion-power-based-sample-size.html#cb21-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">MoreArgs=</span><span class="fu">list</span>(<span class="at">p0 =</span> p0, ...), <span class="at">SIMPLIFY =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-22"><a href="one-sample-proportion-power-based-sample-size.html#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(tst_list) <span class="ot">&lt;-</span> simdat<span class="sc">$</span>ID</span>
+<span id="cb21-23"><a href="one-sample-proportion-power-based-sample-size.html#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># extract values of interest </span></span>
+<span id="cb21-24"><a href="one-sample-proportion-power-based-sample-size.html#cb21-24" aria-hidden="true" tabindex="-1"></a>  res_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(tst_list, </span>
+<span id="cb21-25"><a href="one-sample-proportion-power-based-sample-size.html#cb21-25" aria-hidden="true" tabindex="-1"></a>                     <span class="cf">function</span>(tst)<span class="fu">c</span>(tst<span class="sc">$</span>estimate, tst<span class="sc">$</span>statistic, tst<span class="sc">$</span>p.value))</span>
+<span id="cb21-26"><a href="one-sample-proportion-power-based-sample-size.html#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combine results into one data set</span></span>
+<span id="cb21-27"><a href="one-sample-proportion-power-based-sample-size.html#cb21-27" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">do.call</span>(rbind, res_list))</span>
+<span id="cb21-28"><a href="one-sample-proportion-power-based-sample-size.html#cb21-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(res) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;estimate&quot;</span>, <span class="st">&quot;statistic&quot;</span>, <span class="st">&quot;p.value&quot;</span>)</span>
+<span id="cb21-29"><a href="one-sample-proportion-power-based-sample-size.html#cb21-29" aria-hidden="true" tabindex="-1"></a>  res<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="fu">rownames</span>(res)</span>
+<span id="cb21-30"><a href="one-sample-proportion-power-based-sample-size.html#cb21-30" aria-hidden="true" tabindex="-1"></a>  res</span>
+<span id="cb21-31"><a href="one-sample-proportion-power-based-sample-size.html#cb21-31" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div id="achieved-power" class="section level3 hasAnchor" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> Achieved power<a href="one-sample-proportion-power-based-sample-size.html#achieved-power" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The first simulation study explores how the achieved power lines up with the design power using the sample size calculations.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="one-sample-proportion-power-based-sample-size.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create simulation settings with fewer values for &#39;p&#39; than in the plot </span></span>
+<span id="cb22-2"><a href="one-sample-proportion-power-based-sample-size.html#cb22-2" aria-hidden="true" tabindex="-1"></a>sim_settings <span class="ot">&lt;-</span> </span>
+<span id="cb22-3"><a href="one-sample-proportion-power-based-sample-size.html#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(<span class="at">p =</span> <span class="fu">seq</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="at">by=</span><span class="fl">0.05</span>),</span>
+<span id="cb22-4"><a href="one-sample-proportion-power-based-sample-size.html#cb22-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">p0 =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.5</span>),</span>
+<span id="cb22-5"><a href="one-sample-proportion-power-based-sample-size.html#cb22-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> m0, </span>
+<span id="cb22-6"><a href="one-sample-proportion-power-based-sample-size.html#cb22-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-7"><a href="one-sample-proportion-power-based-sample-size.html#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="one-sample-proportion-power-based-sample-size.html#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Run simulation study 1: given power target, calculate sample size and check achieved power</span></span>
+<span id="cb22-9"><a href="one-sample-proportion-power-based-sample-size.html#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param simset data set with simulation settings - one column per parameter</span></span>
+<span id="cb22-10"><a href="one-sample-proportion-power-based-sample-size.html#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param R number of replicates per setting</span></span>
+<span id="cb22-11"><a href="one-sample-proportion-power-based-sample-size.html#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @returns data frame with one row per each simulation replicate</span></span>
+<span id="cb22-12"><a href="one-sample-proportion-power-based-sample-size.html#cb22-12" aria-hidden="true" tabindex="-1"></a>run_one_prop_sim1 <span class="ot">&lt;-</span> <span class="cf">function</span>(simset, ){</span>
+<span id="cb22-13"><a href="one-sample-proportion-power-based-sample-size.html#cb22-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-14"><a href="one-sample-proportion-power-based-sample-size.html#cb22-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
 </div>
 <div id="functions-in-r-packages-2" class="section level2 hasAnchor" number="3.7">
 <h2><span class="header-section-number">3.7</span> Functions in R packages<a href="one-sample-proportion-power-based-sample-size.html#functions-in-r-packages-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>

@@ -123,9 +123,9 @@ where $F_{B(n,p)}$ is the cdf of the $Binomial(n,p)$ distribution, and $\Phi$ is
 #' sig.level - significance level of test
 #' alternative - type of alternative hypothesis
 #' test - type of test
-power.1prop.test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05, 
+power_one_prop_test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05, 
                              alternative=c("two.sided","less","greater"),
-                             test = c("Wald","score","binomial")){
+                             test = c("binomial","Wald","score")){
   if (is.null(power) + is.null(n) != 1){
     stop("Exactly one of 'n' and 'power' should be non-NULL")
   }
@@ -222,7 +222,7 @@ pw_settings$n <- sapply(1:nrow(pw_settings),
   function(idx) 
     with(pw_settings,
          {if(p[idx] == p0[idx]) Inf else  
-          power.1prop.test(p=p[idx], p0=p0[idx], power=power[idx],
+          power_one_prop_test(p=p[idx], p0=p0[idx], power=power[idx],
                           test=method[idx])$n}))
 
 library(ggplot2)
@@ -246,59 +246,67 @@ ggplot(pw_settings,
 
 ## Example revisited 
 
-## Simulation study
+## Simulation studies
 
-The simulation study explores how the achieved power lines up with the design power using the sample size calculations.
+First, we define functions that simulate data according to the data generating mechanism, and then apply the tests to each replicate.
 
-<!---
+
+```r
+#' Simulate binomial data 
+#' @param p event probability
+#' @param n sample size
+#' @param R number of simulations
+#' @returns data frame with R rows with the simulation ID, the simulated number of successes,
+#' 'x', and the sample size 'n'
+sim_one_prop <- function(p, n, R=1){
+  data.frame(ID = 1:R, 
+             x = rbinom(R, size=n, prob=p), 
+             n=n)
+}
+
+#' Analyze simulated binomial data 
+#' @param simdat output of `sim_one_prop`
+#' @param p0 the null hypothesis value for the test
+#' @param ... additional arguments passed to `one_prop_test`
+#' @returns data frame with estimate, statistic, and p-value from test for each simulation ID
+analyze_one_prop <- function(simdat, p0, ...){
+  # run test on each row
+  tst_list <- mapply(one_prop_test, x=simdat$x, n=simdat$n, 
+                     MoreArgs=list(p0 = p0, ...), SIMPLIFY = FALSE)
+  names(tst_list) <- simdat$ID
+  # extract values of interest 
+  res_list <- lapply(tst_list, 
+                     function(tst)c(tst$estimate, tst$statistic, tst$p.value))
+  # combine results into one data set
+  res <- data.frame(do.call(rbind, res_list))
+  names(res) <- c("estimate", "statistic", "p.value")
+  res$ID <- rownames(res)
+  res
+}
+```
+
+
+### Achieved power
+
+The first simulation study explores how the achieved power lines up with the design power using the sample size calculations.
+
 
 
 ```r
 # create simulation settings with fewer values for 'p' than in the plot 
 sim_settings <- 
   expand.grid(p = seq(0.05, 0.95, by=0.05),
-              p0= c(0.2, 0.5),
+              p0 = c(0.2, 0.5),
               method = m0, 
               stringsAsFactors = FALSE)
 
-# function that, given 'p', 'p0', method and planned sample size, simulates data 'R' times and 
-# computes the p-value of the test
-# output is data frame with one row per simulation
-sim_pw <- function(p, p0, method, R=1000){
-  if (method == "SE"){
-    n <- se_prop(p=p, se=precision)$n
-  } else {
-    n <- prec_prop(p=p, conf.width=precision, method = method)$n
-  }
+#' Run simulation study 1: given power target, calculate sample size and check achieved power
+#' @param simset data set with simulation settings - one column per parameter
+#' @param R number of replicates per setting
+#' @returns data frame with one row per each simulation replicate
+run_one_prop_sim1 <- function(simset, ){
   
-  # round up
-  n <- ceiling(n)
-  
-  # simulate data as binomial sum
-  x <- rbinom(R, size=n, prob=p)
-  
-  if (method == "SE"){
-    phat <- x/n
-    se <- sqrt(phat * (1-phat) / n)
-    res <- data.frame(p = p, target = precision, method = "SE", n=n, precision = se)
-  } else {
-    bmeth <- if (method=="wald") "asymptotic" else method
-    df <- binom.confint(x=x, n=n, methods=bmeth)
-    res <- data.frame(p = p, target = precision, method = method, n=n, 
-                 precision = df$upper - df$lower)
-  }
-  res
 }
-
-# run simulation for each value of the grid
-set.seed(20576)
-sim_list <- lapply(1:nrow(sim_settings),
-                   function(idx) with(sim_settings,
-                                      sim_se_ci(precision = precision[idx], 
-                                                p = p[idx],
-                                                method=method[idx])))
-sim_res <- do.call(rbind, sim_list)
 ```
 
--->
 ## Functions in R packages

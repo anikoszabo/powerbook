@@ -25,5 +25,6 @@ data-generating-mechanism-2
 power-based-sample-size
 getting-inputs-worstbest-case-scenarios-1
 example-revisited-2
-simulation-study-2
+simulation-studies
+achieved-power
 functions-in-r-packages-2

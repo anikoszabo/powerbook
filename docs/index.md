@@ -1,7 +1,7 @@
 --- 
 title: "Power and Sample Size Manual"
 author: "Aniko Szabo"
-date: "2023-05-03"
+date: "2023-05-10"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -50,10 +50,13 @@ It is very much a work in progress, and fixes/contributions in the form of pull 
  
  * Simulation studies implement the following steps as separate functions to enable easy modification:
  
-    - A function named `sim_XX_data` to generate random data for a fixed set of parameters.
-    - A function named `analyze_XX_sim` to analyze one generated data set that produces the summary statistic(s) of interest.
+    - A function named `sim_XX_data` to generate multiple random data sets for a fixed set of parameters.
+    - A function named `analyze_XX_sim` to analyze the simulated data that produces the summary statistic(s) of interest for each replicate. 
     - A function named `run_XX_sim` to loop through multiple settings for parameters that produces one dataset with all the results. 
     - The creation of simulation settings and the display of the simulation results can be in free code.
 
+ * All new functions have Roxygen-style documentation
+ 
+ * A simulation seed is set immediately before any code with randomness, so it can be reproduced as a stand-alone simulation
 
 
