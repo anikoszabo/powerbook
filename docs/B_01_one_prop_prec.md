@@ -95,6 +95,13 @@ se_settings <- expand.grid(p = p0, se = s0)
 se_settings <- transform(se_settings, n = se_prop(p=p, se=se)$n)
 
 library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 4.2.3
+```
+
+```r
 ggplot(se_settings,
        aes(x = p, y = n, color = factor(se), group = se)) +
   geom_line() +
