@@ -226,13 +226,6 @@ pw_settings$n <- sapply(1:nrow(pw_settings),
                           test=method[idx])$n}))
 
 library(ggplot2)
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 4.2.3
-```
-
-```r
 ggplot(pw_settings,
        aes(x = p, y = n, linetype = factor(power), color = method)) +
   facet_wrap(~p0) +
@@ -242,7 +235,7 @@ ggplot(pw_settings,
   scale_linetype_discrete("Target power") +
   xlab("Event probability 'p'") +
   ylab("Sample size 'n'") +
-  ggtitle("Sample size required to achieve target standard error") +
+  ggtitle("Sample size required to achieve target power") +
   scale_y_log10() +
   theme(legend.position = "top")
 ```
@@ -250,8 +243,6 @@ ggplot(pw_settings,
 <img src="B_02_one_prop_power_files/figure-html/OneProp_PowerPlot-1.png" width="672" />
 
 
-
-## Example revisited 
 
 ## Simulation studies
 
@@ -293,7 +284,7 @@ analyze_one_prop <- function(simdat, p0, ...){
 ```
 
 
-### Achieved power
+### Achieved power when calculating sample size
 
 The first simulation study explores how the achieved power lines up with the design power using the sample size calculations.
 
@@ -342,12 +333,103 @@ run_one_prop_sim1 <- function(simset, R, ...){
 
 # run simulations
 set.seed(45636)
-sim1 <- run_one_prop_sim1(sim_settings, R=1000)
-# extract power
+R <- 1000
+sim1 <- run_one_prop_sim1(sim_settings, R=R)
+# extract power at alpha=0.05
 sim1_pw <-  aggregate(p.value ~ p+delta+p0+method+power, 
                       data=sim1, 
                       FUN = function(x)mean(x <= 0.05))
+# rename 'p.value' column to better describe its current contents
+names(sim1_pw)[names(sim1_pw) =="p.value"] <- "est.power"
+# standard error 
+sim1_pw <- transform(sim1_pw,
+                     est.power.se = sqrt(est.power*(1-est.power)/R))
+
+# create plot
+ggplot(sim1_pw, aes(x=p, y=est.power, color = factor(power))) +
+  facet_grid(method ~ p0, labeller = label_both, scales="free_x") +
+  geom_hline(aes(yintercept = power, color = factor(power))) +
+  geom_pointrange(aes(ymin = est.power-est.power.se, ymax = est.power+est.power.se)) +
+  scale_x_continuous("True event probability 'p'") +
+  scale_y_continuous("Estimated power (+- SE)") +
+  scale_color_discrete("Power")
 ```
 
+<img src="B_02_one_prop_power_files/figure-html/OnePropSim1-1.png" width="672" />
+
+### Achieved power with fixed sample size
+
+The second simulation study explores how the achieved power lines up with the calculated power when using a fixed sample size.
+
+
+
+```r
+# create simulation settings based on p-p0 difference 
+sim_settings2 <- 
+  expand.grid(p0 = c(0.2, 0.5),
+              method = m0, 
+              n = c(20, 50, 100),
+              delta = c(-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15),
+              stringsAsFactors = FALSE)
+sim_settings2$p <- sim_settings2$p0 + sim_settings2$delta
+
+#' Function to run simulations for study 2: given sample size, calculate power and check achieved power
+#' @param simset data set with simulation settings - one column per parameter
+#' @param R number of replicates per setting
+#' @param ... additional arguments to 'power_one_prop_test' not defined in 'simset'
+#' @returns data frame with one row per each simulation replicate
+run_one_prop_sim2 <- function(simset, R, ...){
+  sim_list <- list()
+  # loop through simulation settings
+  for (idx in 1:nrow(simset)){
+    simres <- with(simset[idx,], {
+      # calculate 'power'
+      pw <- power_one_prop_test(n=n, p = p, p0 = p0, test = method, 
+                               power=NULL, ... )
+      # simulate R replicates
+      simdat <- sim_one_prop(p = p, n = n, R = R)
+      # analyze the data and return as simres
+      tmp <- analyze_one_prop(simdat, p0 = p0, method = method, ...)
+      # add 'power'
+      cbind(tmp, power=pw$power)
+    })
+    # append simulation settings
+    simres <- cbind(simID = idx, simres, simset[idx,])
+    # save result
+    sim_list <- c(sim_list, list(simres))
+  }
+  # combine data
+  res <- do.call(rbind, sim_list)
+  res
+}
+
+# run simulations
+set.seed(45636)
+R <- 1000
+sim2 <- run_one_prop_sim2(sim_settings2, R=R)
+# extract power at alpha=0.05
+sim2_pw <-  aggregate(p.value ~ p+delta+p0+method+n+power, 
+                      data=sim2, 
+                      FUN = function(x)mean(x <= 0.05))
+# rename 'p.value' column to better describe its current contents
+names(sim2_pw)[names(sim2_pw) =="p.value"] <- "est.power"
+# standard error 
+sim2_pw <- transform(sim2_pw,
+                     est.power.se = sqrt(est.power*(1-est.power)/R))
+
+# create plot
+ggplot(sim2_pw, aes(x=p, y=est.power, color=factor(n))) +
+  facet_grid(method ~ p0, labeller = label_both, scales="free_x") +
+  geom_line(aes(y = power, color=factor(n))) +
+  geom_pointrange(aes(ymin = est.power-est.power.se, ymax = est.power+est.power.se)) +
+  scale_x_continuous("True event probability 'p'") +
+  scale_y_continuous("Estimated power (+- SE)") +
+  scale_color_discrete("Sample size 'n'")
+```
+
+<img src="B_02_one_prop_power_files/figure-html/OnePropSim2-1.png" width="672" />
+
+
+## Example revisited 
 
 ## Functions in R packages

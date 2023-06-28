@@ -1,7 +1,7 @@
 --- 
 title: "Power and Sample Size Manual"
 author: "Aniko Szabo"
-date: "2023-05-17"
+date: "2023-06-28"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]

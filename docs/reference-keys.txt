@@ -24,7 +24,8 @@ example-2
 data-generating-mechanism-2
 power-based-sample-size
 getting-inputs-worstbest-case-scenarios-1
-example-revisited-2
 simulation-studies
-achieved-power
+achieved-power-when-calculating-sample-size
+achieved-power-with-fixed-sample-size
+example-revisited-2
 functions-in-r-packages-2

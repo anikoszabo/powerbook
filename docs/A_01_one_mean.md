@@ -193,13 +193,6 @@ se_settings$n <- sapply(1:nrow(se_settings), function(idx) with (se_settings, so
 
 
 library(ggplot2)
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 4.2.3
-```
-
-```r
 ggplot(se_settings, aes(x = p, y = n, color = m, group = m)) +
   geom_line()+
   scale_color_discrete("Method") +

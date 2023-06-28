@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>1 One-sample mean: precision-based sample size | Power and Sample Size Manual</title>
   <meta name="description" content="This is a reference book for power and sample size calculations using R" />
-  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
 
   <meta property="og:title" content="1 One-sample mean: precision-based sample size | Power and Sample Size Manual" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Aniko Szabo" />
 
 
-<meta name="date" content="2023-05-17" />
+<meta name="date" content="2023-06-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -92,7 +92,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -105,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -119,6 +119,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -209,11 +213,12 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#power-formula"><i class="fa fa-check"></i>Power formula</a></li>
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#getting-inputs-worstbest-case-scenarios-1"><i class="fa fa-check"></i><b>3.4</b> Getting inputs, worst/best case scenarios</a></li>
-<li class="chapter" data-level="3.5" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#example-revisited-2"><i class="fa fa-check"></i><b>3.5</b> Example revisited</a></li>
-<li class="chapter" data-level="3.6" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#simulation-studies"><i class="fa fa-check"></i><b>3.6</b> Simulation studies</a>
+<li class="chapter" data-level="3.5" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#simulation-studies"><i class="fa fa-check"></i><b>3.5</b> Simulation studies</a>
 <ul>
-<li class="chapter" data-level="3.6.1" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#achieved-power"><i class="fa fa-check"></i><b>3.6.1</b> Achieved power</a></li>
+<li class="chapter" data-level="3.5.1" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#achieved-power-when-calculating-sample-size"><i class="fa fa-check"></i><b>3.5.1</b> Achieved power when calculating sample size</a></li>
+<li class="chapter" data-level="3.5.2" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#achieved-power-with-fixed-sample-size"><i class="fa fa-check"></i><b>3.5.2</b> Achieved power with fixed sample size</a></li>
 </ul></li>
+<li class="chapter" data-level="3.6" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#example-revisited-2"><i class="fa fa-check"></i><b>3.6</b> Example revisited</a></li>
 <li class="chapter" data-level="3.7" data-path="one-sample-proportion-power-based-sample-size.html"><a href="one-sample-proportion-power-based-sample-size.html#functions-in-r-packages-2"><i class="fa fa-check"></i><b>3.7</b> Functions in R packages</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -258,22 +263,22 @@ it is <span class="math inline">\(\underline{not}\)</span> required for the unde
 <span class="math inline">\(SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}\)</span>.</p>
 <p>Solving for <span class="math inline">\(n\)</span>, we have <span class="math display">\[n= \frac{\sigma^{2}}{SE^2},\]</span> where SE is the targeted
 standard error of the estimate.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="one-sample-mean-precision-based-sample-size.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;Calculate standard error for given sample size, or vice versa. Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL</span></span>
-<span id="cb1-2"><a href="one-sample-mean-precision-based-sample-size.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="one-sample-mean-precision-based-sample-size.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;sd - expected standard deviation</span></span>
-<span id="cb1-4"><a href="one-sample-mean-precision-based-sample-size.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;n - sample size </span></span>
-<span id="cb1-5"><a href="one-sample-mean-precision-based-sample-size.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;se - standard error of estimated mean</span></span>
-<span id="cb1-6"><a href="one-sample-mean-precision-based-sample-size.html#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="one-sample-mean-precision-based-sample-size.html#cb1-7" aria-hidden="true" tabindex="-1"></a>se_mean <span class="ot">&lt;-</span> <span class="cf">function</span> (sd, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">se=</span><span class="cn">NULL</span>)  {</span>
-<span id="cb1-8"><a href="one-sample-mean-precision-based-sample-size.html#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(n) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(se))   {</span>
-<span id="cb1-9"><a href="one-sample-mean-precision-based-sample-size.html#cb1-9" aria-hidden="true" tabindex="-1"></a>    (n<span class="ot">&lt;-</span>(sd<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>se<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb1-10"><a href="one-sample-mean-precision-based-sample-size.html#cb1-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(n) <span class="sc">&amp;</span> <span class="fu">is.null</span>(se)){</span>
-<span id="cb1-11"><a href="one-sample-mean-precision-based-sample-size.html#cb1-11" aria-hidden="true" tabindex="-1"></a>    (se <span class="ot">&lt;-</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
-<span id="cb1-12"><a href="one-sample-mean-precision-based-sample-size.html#cb1-12" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="fu">stop</span>(<span class="st">&quot;Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL; &#39;sd&#39; must be known&quot;</span>)</span>
-<span id="cb1-13"><a href="one-sample-mean-precision-based-sample-size.html#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="one-sample-mean-precision-based-sample-size.html#cb1-14" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span> (<span class="at">n =</span> n, <span class="at">sd =</span> sd, <span class="at">se =</span> se)</span>
-<span id="cb1-15"><a href="one-sample-mean-precision-based-sample-size.html#cb1-15" aria-hidden="true" tabindex="-1"></a>  res</span>
-<span id="cb1-16"><a href="one-sample-mean-precision-based-sample-size.html#cb1-16" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="one-sample-mean-precision-based-sample-size.html#cb1-1" tabindex="-1"></a><span class="co">#&#39;Calculate standard error for given sample size, or vice versa. Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL</span></span>
+<span id="cb1-2"><a href="one-sample-mean-precision-based-sample-size.html#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="one-sample-mean-precision-based-sample-size.html#cb1-3" tabindex="-1"></a><span class="co">#&#39;sd - expected standard deviation</span></span>
+<span id="cb1-4"><a href="one-sample-mean-precision-based-sample-size.html#cb1-4" tabindex="-1"></a><span class="co">#&#39;n - sample size </span></span>
+<span id="cb1-5"><a href="one-sample-mean-precision-based-sample-size.html#cb1-5" tabindex="-1"></a><span class="co">#&#39;se - standard error of estimated mean</span></span>
+<span id="cb1-6"><a href="one-sample-mean-precision-based-sample-size.html#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="one-sample-mean-precision-based-sample-size.html#cb1-7" tabindex="-1"></a>se_mean <span class="ot">&lt;-</span> <span class="cf">function</span> (sd, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">se=</span><span class="cn">NULL</span>)  {</span>
+<span id="cb1-8"><a href="one-sample-mean-precision-based-sample-size.html#cb1-8" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(n) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(se))   {</span>
+<span id="cb1-9"><a href="one-sample-mean-precision-based-sample-size.html#cb1-9" tabindex="-1"></a>    (n<span class="ot">&lt;-</span>(sd<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>se<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-10"><a href="one-sample-mean-precision-based-sample-size.html#cb1-10" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(n) <span class="sc">&amp;</span> <span class="fu">is.null</span>(se)){</span>
+<span id="cb1-11"><a href="one-sample-mean-precision-based-sample-size.html#cb1-11" tabindex="-1"></a>    (se <span class="ot">&lt;-</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
+<span id="cb1-12"><a href="one-sample-mean-precision-based-sample-size.html#cb1-12" tabindex="-1"></a>  } <span class="cf">else</span> <span class="fu">stop</span>(<span class="st">&quot;Exactly one of &#39;n&#39; and &#39;se&#39; has to be NULL; &#39;sd&#39; must be known&quot;</span>)</span>
+<span id="cb1-13"><a href="one-sample-mean-precision-based-sample-size.html#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="one-sample-mean-precision-based-sample-size.html#cb1-14" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span> (<span class="at">n =</span> n, <span class="at">sd =</span> sd, <span class="at">se =</span> se)</span>
+<span id="cb1-15"><a href="one-sample-mean-precision-based-sample-size.html#cb1-15" tabindex="-1"></a>  res</span>
+<span id="cb1-16"><a href="one-sample-mean-precision-based-sample-size.html#cb1-16" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
 <div id="confidence-interval" class="section level3 hasAnchor" number="1.3.2">
 <h3><span class="header-section-number">1.3.2</span> Confidence Interval<a href="one-sample-mean-precision-based-sample-size.html#confidence-interval" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -296,23 +301,23 @@ will be normally distributed regardless of the population distribution.</p>
 <p>where <span class="math inline">\(t_{\frac {\alpha}{2}, n-1}\)</span> is the upper <span class="math inline">\(\frac{\alpha}{2}\)</span>th quantile of the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom, and <span class="math inline">\(s\)</span> is the sample standard deviation.</p>
 <p>To understand the difference between the <span class="math inline">\(z\)</span>-based interval and <span class="math inline">\(t\)</span>-based
 interval, consider the following graph:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="one-sample-mean-precision-based-sample-size.html#cb2-1" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>)</span>
-<span id="cb2-2"><a href="one-sample-mean-precision-based-sample-size.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="one-sample-mean-precision-based-sample-size.html#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">c</span>(sample_sizes <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb2-4"><a href="one-sample-mean-precision-based-sample-size.html#cb2-4" aria-hidden="true" tabindex="-1"></a>t_values <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="at">p=</span>.<span class="dv">05</span><span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> df, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-5"><a href="one-sample-mean-precision-based-sample-size.html#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="one-sample-mean-precision-based-sample-size.html#cb2-6" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="at">p=</span>.<span class="dv">05</span><span class="sc">/</span><span class="dv">2</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
-<span id="cb2-7"><a href="one-sample-mean-precision-based-sample-size.html#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="one-sample-mean-precision-based-sample-size.html#cb2-8" aria-hidden="true" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> sample_sizes, </span>
-<span id="cb2-9"><a href="one-sample-mean-precision-based-sample-size.html#cb2-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">t =</span> t_values,</span>
-<span id="cb2-10"><a href="one-sample-mean-precision-based-sample-size.html#cb2-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">z =</span> z)</span>
-<span id="cb2-11"><a href="one-sample-mean-precision-based-sample-size.html#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="one-sample-mean-precision-based-sample-size.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span> (xy<span class="sc">$</span>n, xy<span class="sc">$</span>t, <span class="at">type=</span><span class="st">&#39;o&#39;</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb2-13"><a href="one-sample-mean-precision-based-sample-size.html#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;Sample Size&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Critical-Values&quot;</span>, </span>
-<span id="cb2-14"><a href="one-sample-mean-precision-based-sample-size.html#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">&quot;Critical-Values by Sample Size at 95% Confidence Level&quot;</span>)</span>
-<span id="cb2-15"><a href="one-sample-mean-precision-based-sample-size.html#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(xy<span class="sc">$</span>n, xy<span class="sc">$</span>z, <span class="at">col=</span><span class="st">&#39;blue&#39;</span>, <span class="at">type=</span><span class="st">&quot;o&quot;</span>, <span class="at">pch=</span><span class="dv">4</span>)</span>
-<span id="cb2-16"><a href="one-sample-mean-precision-based-sample-size.html#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;t-values&quot;</span>, <span class="st">&quot;z-values&quot;</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>), </span>
-<span id="cb2-17"><a href="one-sample-mean-precision-based-sample-size.html#cb2-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>), <span class="at">lty=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="one-sample-mean-precision-based-sample-size.html#cb2-1" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>)</span>
+<span id="cb2-2"><a href="one-sample-mean-precision-based-sample-size.html#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="one-sample-mean-precision-based-sample-size.html#cb2-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">c</span>(sample_sizes <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-4"><a href="one-sample-mean-precision-based-sample-size.html#cb2-4" tabindex="-1"></a>t_values <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="at">p=</span>.<span class="dv">05</span><span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> df, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-5"><a href="one-sample-mean-precision-based-sample-size.html#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="one-sample-mean-precision-based-sample-size.html#cb2-6" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="at">p=</span>.<span class="dv">05</span><span class="sc">/</span><span class="dv">2</span>, <span class="at">lower.tail=</span><span class="cn">FALSE</span>)</span>
+<span id="cb2-7"><a href="one-sample-mean-precision-based-sample-size.html#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="one-sample-mean-precision-based-sample-size.html#cb2-8" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> sample_sizes, </span>
+<span id="cb2-9"><a href="one-sample-mean-precision-based-sample-size.html#cb2-9" tabindex="-1"></a>                 <span class="at">t =</span> t_values,</span>
+<span id="cb2-10"><a href="one-sample-mean-precision-based-sample-size.html#cb2-10" tabindex="-1"></a>                 <span class="at">z =</span> z)</span>
+<span id="cb2-11"><a href="one-sample-mean-precision-based-sample-size.html#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="one-sample-mean-precision-based-sample-size.html#cb2-12" tabindex="-1"></a><span class="fu">plot</span> (xy<span class="sc">$</span>n, xy<span class="sc">$</span>t, <span class="at">type=</span><span class="st">&#39;o&#39;</span>, <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb2-13"><a href="one-sample-mean-precision-based-sample-size.html#cb2-13" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;Sample Size&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Critical-Values&quot;</span>, </span>
+<span id="cb2-14"><a href="one-sample-mean-precision-based-sample-size.html#cb2-14" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">&quot;Critical-Values by Sample Size at 95% Confidence Level&quot;</span>)</span>
+<span id="cb2-15"><a href="one-sample-mean-precision-based-sample-size.html#cb2-15" tabindex="-1"></a><span class="fu">points</span>(xy<span class="sc">$</span>n, xy<span class="sc">$</span>z, <span class="at">col=</span><span class="st">&#39;blue&#39;</span>, <span class="at">type=</span><span class="st">&quot;o&quot;</span>, <span class="at">pch=</span><span class="dv">4</span>)</span>
+<span id="cb2-16"><a href="one-sample-mean-precision-based-sample-size.html#cb2-16" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;t-values&quot;</span>, <span class="st">&quot;z-values&quot;</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>), </span>
+<span id="cb2-17"><a href="one-sample-mean-precision-based-sample-size.html#cb2-17" tabindex="-1"></a>       <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">4</span>), <span class="at">lty=</span><span class="dv">1</span>)</span></code></pre></div>
 <p><img src="A_01_one_mean_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>The red line represents the <span class="math inline">\(t\)</span> critical values associated with various
 sample sizes; the blue line represents the constant value of 1.959964,
@@ -320,193 +325,192 @@ which is the <span class="math inline">\(z\)</span> critical value. We can see t
 between using a <span class="math inline">\(t\)</span> critical-value and using a <span class="math inline">\(z\)</span> critical-value is
 negligible.</p>
 <p>The <code>prec_mean</code> function in <code>{presize}</code> provides the sample size calculation for the <span class="math inline">\(t\)</span>-based confidence interval.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="one-sample-mean-precision-based-sample-size.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(presize)</span>
-<span id="cb3-2"><a href="one-sample-mean-precision-based-sample-size.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(prec_mean)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="one-sample-mean-precision-based-sample-size.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(presize)</span>
+<span id="cb3-2"><a href="one-sample-mean-precision-based-sample-size.html#cb3-2" tabindex="-1"></a><span class="fu">str</span>(prec_mean)</span></code></pre></div>
 <pre><code>## function (mean, sd, n = NULL, conf.width = NULL, conf.level = 0.95, ..., 
 ##     mu = NULL)</code></pre>
 <p>Note that the formulas above imply that the <code>mean</code> is a superfluous parameter, and can be set to any value. For completeness, the following function implements a <span class="math inline">\(z\)</span>-based computation.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="one-sample-mean-precision-based-sample-size.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function that can find the n or conf.width based on what is null.</span></span>
-<span id="cb5-2"><a href="one-sample-mean-precision-based-sample-size.html#cb5-2" aria-hidden="true" tabindex="-1"></a>prec_mean_z <span class="ot">&lt;-</span> <span class="cf">function</span> (sd, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">conf.width =</span> <span class="cn">NULL</span>, <span class="at">conf.level=</span>.<span class="dv">95</span>) {</span>
-<span id="cb5-3"><a href="one-sample-mean-precision-based-sample-size.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>conf.level)<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb5-4"><a href="one-sample-mean-precision-based-sample-size.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(alpha, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb5-5"><a href="one-sample-mean-precision-based-sample-size.html#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="one-sample-mean-precision-based-sample-size.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(conf.width) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(n)) {</span>
-<span id="cb5-7"><a href="one-sample-mean-precision-based-sample-size.html#cb5-7" aria-hidden="true" tabindex="-1"></a>  ci<span class="ot">&lt;-</span> (z<span class="sc">*</span>(sd<span class="sc">/</span><span class="fu">sqrt</span>(n)))</span>
-<span id="cb5-8"><a href="one-sample-mean-precision-based-sample-size.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  conf.width <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> ci</span>
-<span id="cb5-9"><a href="one-sample-mean-precision-based-sample-size.html#cb5-9" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">list</span> (<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">conf.width =</span> conf.width, <span class="at">conf.level =</span> conf.level)</span>
-<span id="cb5-10"><a href="one-sample-mean-precision-based-sample-size.html#cb5-10" aria-hidden="true" tabindex="-1"></a>res</span>
-<span id="cb5-11"><a href="one-sample-mean-precision-based-sample-size.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-12"><a href="one-sample-mean-precision-based-sample-size.html#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="one-sample-mean-precision-based-sample-size.html#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.null</span>(conf.width) <span class="sc">&amp;</span> <span class="fu">is.null</span>(n)) {</span>
-<span id="cb5-14"><a href="one-sample-mean-precision-based-sample-size.html#cb5-14" aria-hidden="true" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> conf.width<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb5-15"><a href="one-sample-mean-precision-based-sample-size.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> ((sd<span class="sc">*</span>z)<span class="sc">/</span>ci)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb5-16"><a href="one-sample-mean-precision-based-sample-size.html#cb5-16" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-17"><a href="one-sample-mean-precision-based-sample-size.html#cb5-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-18"><a href="one-sample-mean-precision-based-sample-size.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">stop</span> (<span class="st">&quot;Exactly one of &#39;n&#39; and &#39;conf.width&#39; must be NULL&quot;</span>)</span>
-<span id="cb5-19"><a href="one-sample-mean-precision-based-sample-size.html#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="one-sample-mean-precision-based-sample-size.html#cb5-20" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span> (<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">conf.width =</span> conf.width, <span class="at">conf.level =</span> conf.level)</span>
-<span id="cb5-21"><a href="one-sample-mean-precision-based-sample-size.html#cb5-21" aria-hidden="true" tabindex="-1"></a>res }</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="one-sample-mean-precision-based-sample-size.html#cb5-1" tabindex="-1"></a><span class="co"># Function that can find the n or conf.width based on what is null.</span></span>
+<span id="cb5-2"><a href="one-sample-mean-precision-based-sample-size.html#cb5-2" tabindex="-1"></a>prec_mean_z <span class="ot">&lt;-</span> <span class="cf">function</span> (sd, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">conf.width =</span> <span class="cn">NULL</span>, <span class="at">conf.level=</span>.<span class="dv">95</span>) {</span>
+<span id="cb5-3"><a href="one-sample-mean-precision-based-sample-size.html#cb5-3" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>conf.level)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb5-4"><a href="one-sample-mean-precision-based-sample-size.html#cb5-4" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(alpha, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-5"><a href="one-sample-mean-precision-based-sample-size.html#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="one-sample-mean-precision-based-sample-size.html#cb5-6" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(conf.width) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(n)) {</span>
+<span id="cb5-7"><a href="one-sample-mean-precision-based-sample-size.html#cb5-7" tabindex="-1"></a>  ci<span class="ot">&lt;-</span> (z<span class="sc">*</span>(sd<span class="sc">/</span><span class="fu">sqrt</span>(n)))</span>
+<span id="cb5-8"><a href="one-sample-mean-precision-based-sample-size.html#cb5-8" tabindex="-1"></a>  conf.width <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> ci</span>
+<span id="cb5-9"><a href="one-sample-mean-precision-based-sample-size.html#cb5-9" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">list</span> (<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">conf.width =</span> conf.width, <span class="at">conf.level =</span> conf.level)</span>
+<span id="cb5-10"><a href="one-sample-mean-precision-based-sample-size.html#cb5-10" tabindex="-1"></a>res</span>
+<span id="cb5-11"><a href="one-sample-mean-precision-based-sample-size.html#cb5-11" tabindex="-1"></a>  }</span>
+<span id="cb5-12"><a href="one-sample-mean-precision-based-sample-size.html#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="one-sample-mean-precision-based-sample-size.html#cb5-13" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(<span class="sc">!</span><span class="fu">is.null</span>(conf.width) <span class="sc">&amp;</span> <span class="fu">is.null</span>(n)) {</span>
+<span id="cb5-14"><a href="one-sample-mean-precision-based-sample-size.html#cb5-14" tabindex="-1"></a>  ci <span class="ot">&lt;-</span> conf.width<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb5-15"><a href="one-sample-mean-precision-based-sample-size.html#cb5-15" tabindex="-1"></a>  n <span class="ot">&lt;-</span> ((sd<span class="sc">*</span>z)<span class="sc">/</span>ci)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb5-16"><a href="one-sample-mean-precision-based-sample-size.html#cb5-16" tabindex="-1"></a>  }</span>
+<span id="cb5-17"><a href="one-sample-mean-precision-based-sample-size.html#cb5-17" tabindex="-1"></a>  </span>
+<span id="cb5-18"><a href="one-sample-mean-precision-based-sample-size.html#cb5-18" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">stop</span> (<span class="st">&quot;Exactly one of &#39;n&#39; and &#39;conf.width&#39; must be NULL&quot;</span>)</span>
+<span id="cb5-19"><a href="one-sample-mean-precision-based-sample-size.html#cb5-19" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="one-sample-mean-precision-based-sample-size.html#cb5-20" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">list</span> (<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">conf.width =</span> conf.width, <span class="at">conf.level =</span> conf.level)</span>
+<span id="cb5-21"><a href="one-sample-mean-precision-based-sample-size.html#cb5-21" tabindex="-1"></a>res }</span></code></pre></div>
 </div>
 </div>
 <div id="simulation-study" class="section level2 hasAnchor" number="1.4">
 <h2><span class="header-section-number">1.4</span> Simulation study<a href="one-sample-mean-precision-based-sample-size.html#simulation-study" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="one-sample-mean-precision-based-sample-size.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write function to get n</span></span>
-<span id="cb6-2"><a href="one-sample-mean-precision-based-sample-size.html#cb6-2" aria-hidden="true" tabindex="-1"></a>solve_n <span class="ot">&lt;-</span> <span class="cf">function</span> (precision, sd, <span class="at">conf.level=</span>.<span class="dv">95</span>, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>))</span>
-<span id="cb6-3"><a href="one-sample-mean-precision-based-sample-size.html#cb6-3" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb6-4"><a href="one-sample-mean-precision-based-sample-size.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(method, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>))</span>
-<span id="cb6-5"><a href="one-sample-mean-precision-based-sample-size.html#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="one-sample-mean-precision-based-sample-size.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>)</span>
-<span id="cb6-7"><a href="one-sample-mean-precision-based-sample-size.html#cb6-7" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb6-8"><a href="one-sample-mean-precision-based-sample-size.html#cb6-8" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">se_mean</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">se =</span> precision)<span class="sc">$</span>n</span>
-<span id="cb6-9"><a href="one-sample-mean-precision-based-sample-size.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-10"><a href="one-sample-mean-precision-based-sample-size.html#cb6-10" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb6-11"><a href="one-sample-mean-precision-based-sample-size.html#cb6-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-12"><a href="one-sample-mean-precision-based-sample-size.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
-<span id="cb6-13"><a href="one-sample-mean-precision-based-sample-size.html#cb6-13" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb6-14"><a href="one-sample-mean-precision-based-sample-size.html#cb6-14" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">prec_mean_z</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">conf.width =</span> precision, <span class="at">conf.level =</span> conf.level)<span class="sc">$</span>n</span>
-<span id="cb6-15"><a href="one-sample-mean-precision-based-sample-size.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-16"><a href="one-sample-mean-precision-based-sample-size.html#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-17"><a href="one-sample-mean-precision-based-sample-size.html#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="one-sample-mean-precision-based-sample-size.html#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
-<span id="cb6-19"><a href="one-sample-mean-precision-based-sample-size.html#cb6-19" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb6-20"><a href="one-sample-mean-precision-based-sample-size.html#cb6-20" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">prec_mean</span> (<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">conf.width =</span> precision, <span class="at">conf.level =</span> conf.level, <span class="at">sd =</span> sd)<span class="sc">$</span>n</span>
-<span id="cb6-21"><a href="one-sample-mean-precision-based-sample-size.html#cb6-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-22"><a href="one-sample-mean-precision-based-sample-size.html#cb6-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-23"><a href="one-sample-mean-precision-based-sample-size.html#cb6-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-24"><a href="one-sample-mean-precision-based-sample-size.html#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">stop</span> (<span class="st">&quot;&#39;method&#39; must be &#39;z&#39;, &#39;t&#39;, or &#39;SE&#39;&quot;</span>)</span>
-<span id="cb6-25"><a href="one-sample-mean-precision-based-sample-size.html#cb6-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-26"><a href="one-sample-mean-precision-based-sample-size.html#cb6-26" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(n)</span>
-<span id="cb6-27"><a href="one-sample-mean-precision-based-sample-size.html#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(n)</span>
-<span id="cb6-28"><a href="one-sample-mean-precision-based-sample-size.html#cb6-28" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-29"><a href="one-sample-mean-precision-based-sample-size.html#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-30"><a href="one-sample-mean-precision-based-sample-size.html#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="one-sample-mean-precision-based-sample-size.html#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Find n based on various sd, method, or, p.</span></span>
-<span id="cb6-32"><a href="one-sample-mean-precision-based-sample-size.html#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-33"><a href="one-sample-mean-precision-based-sample-size.html#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="do">## set vector of precision values (p0) and methods (m0) to explore</span></span>
-<span id="cb6-34"><a href="one-sample-mean-precision-based-sample-size.html#cb6-34" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="at">by=</span>.<span class="dv">5</span>)</span>
-<span id="cb6-35"><a href="one-sample-mean-precision-based-sample-size.html#cb6-35" aria-hidden="true" tabindex="-1"></a>sd0 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb6-36"><a href="one-sample-mean-precision-based-sample-size.html#cb6-36" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>)</span>
-<span id="cb6-37"><a href="one-sample-mean-precision-based-sample-size.html#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Data set with varying &#39;mean&#39; and &#39;w&#39;</span></span>
-<span id="cb6-38"><a href="one-sample-mean-precision-based-sample-size.html#cb6-38" aria-hidden="true" tabindex="-1"></a>se_settings <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">p =</span> p0, <span class="at">sd =</span> sd0, <span class="at">m =</span> m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-39"><a href="one-sample-mean-precision-based-sample-size.html#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-40"><a href="one-sample-mean-precision-based-sample-size.html#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the sim mean functions to all possibilities like se_settings</span></span>
-<span id="cb6-41"><a href="one-sample-mean-precision-based-sample-size.html#cb6-41" aria-hidden="true" tabindex="-1"></a>se_settings<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(se_settings), <span class="cf">function</span>(idx) <span class="fu">with</span> (se_settings, <span class="fu">solve_n</span> (<span class="at">precision =</span> p[idx], <span class="at">sd =</span> sd[idx], <span class="at">method =</span> m[idx])))</span>
-<span id="cb6-42"><a href="one-sample-mean-precision-based-sample-size.html#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-43"><a href="one-sample-mean-precision-based-sample-size.html#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="one-sample-mean-precision-based-sample-size.html#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.2.3</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="one-sample-mean-precision-based-sample-size.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(se_settings, <span class="fu">aes</span>(<span class="at">x =</span> p, <span class="at">y =</span> n, <span class="at">color =</span> m, <span class="at">group =</span> m)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="one-sample-mean-precision-based-sample-size.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb8-3"><a href="one-sample-mean-precision-based-sample-size.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">&quot;Method&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-4"><a href="one-sample-mean-precision-based-sample-size.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Target precision &#39;p&#39;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-5"><a href="one-sample-mean-precision-based-sample-size.html#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Sample size &#39;n&#39;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-6"><a href="one-sample-mean-precision-based-sample-size.html#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sample size required to achieve target precision&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="one-sample-mean-precision-based-sample-size.html#cb6-1" tabindex="-1"></a><span class="co"># Write function to get n</span></span>
+<span id="cb6-2"><a href="one-sample-mean-precision-based-sample-size.html#cb6-2" tabindex="-1"></a>solve_n <span class="ot">&lt;-</span> <span class="cf">function</span> (precision, sd, <span class="at">conf.level=</span>.<span class="dv">95</span>, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>))</span>
+<span id="cb6-3"><a href="one-sample-mean-precision-based-sample-size.html#cb6-3" tabindex="-1"></a>{</span>
+<span id="cb6-4"><a href="one-sample-mean-precision-based-sample-size.html#cb6-4" tabindex="-1"></a>  method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(method, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>))</span>
+<span id="cb6-5"><a href="one-sample-mean-precision-based-sample-size.html#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="one-sample-mean-precision-based-sample-size.html#cb6-6" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>)</span>
+<span id="cb6-7"><a href="one-sample-mean-precision-based-sample-size.html#cb6-7" tabindex="-1"></a>    {</span>
+<span id="cb6-8"><a href="one-sample-mean-precision-based-sample-size.html#cb6-8" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">se_mean</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">se =</span> precision)<span class="sc">$</span>n</span>
+<span id="cb6-9"><a href="one-sample-mean-precision-based-sample-size.html#cb6-9" tabindex="-1"></a>  }</span>
+<span id="cb6-10"><a href="one-sample-mean-precision-based-sample-size.html#cb6-10" tabindex="-1"></a>   </span>
+<span id="cb6-11"><a href="one-sample-mean-precision-based-sample-size.html#cb6-11" tabindex="-1"></a>  </span>
+<span id="cb6-12"><a href="one-sample-mean-precision-based-sample-size.html#cb6-12" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
+<span id="cb6-13"><a href="one-sample-mean-precision-based-sample-size.html#cb6-13" tabindex="-1"></a>    {</span>
+<span id="cb6-14"><a href="one-sample-mean-precision-based-sample-size.html#cb6-14" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">prec_mean_z</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> <span class="cn">NULL</span>, <span class="at">conf.width =</span> precision, <span class="at">conf.level =</span> conf.level)<span class="sc">$</span>n</span>
+<span id="cb6-15"><a href="one-sample-mean-precision-based-sample-size.html#cb6-15" tabindex="-1"></a>  }</span>
+<span id="cb6-16"><a href="one-sample-mean-precision-based-sample-size.html#cb6-16" tabindex="-1"></a>  </span>
+<span id="cb6-17"><a href="one-sample-mean-precision-based-sample-size.html#cb6-17" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="one-sample-mean-precision-based-sample-size.html#cb6-18" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
+<span id="cb6-19"><a href="one-sample-mean-precision-based-sample-size.html#cb6-19" tabindex="-1"></a>  {</span>
+<span id="cb6-20"><a href="one-sample-mean-precision-based-sample-size.html#cb6-20" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">prec_mean</span> (<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">conf.width =</span> precision, <span class="at">conf.level =</span> conf.level, <span class="at">sd =</span> sd)<span class="sc">$</span>n</span>
+<span id="cb6-21"><a href="one-sample-mean-precision-based-sample-size.html#cb6-21" tabindex="-1"></a>}</span>
+<span id="cb6-22"><a href="one-sample-mean-precision-based-sample-size.html#cb6-22" tabindex="-1"></a>  </span>
+<span id="cb6-23"><a href="one-sample-mean-precision-based-sample-size.html#cb6-23" tabindex="-1"></a>  </span>
+<span id="cb6-24"><a href="one-sample-mean-precision-based-sample-size.html#cb6-24" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">stop</span> (<span class="st">&quot;&#39;method&#39; must be &#39;z&#39;, &#39;t&#39;, or &#39;SE&#39;&quot;</span>)</span>
+<span id="cb6-25"><a href="one-sample-mean-precision-based-sample-size.html#cb6-25" tabindex="-1"></a>  </span>
+<span id="cb6-26"><a href="one-sample-mean-precision-based-sample-size.html#cb6-26" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(n)</span>
+<span id="cb6-27"><a href="one-sample-mean-precision-based-sample-size.html#cb6-27" tabindex="-1"></a>  <span class="fu">return</span>(n)</span>
+<span id="cb6-28"><a href="one-sample-mean-precision-based-sample-size.html#cb6-28" tabindex="-1"></a>}</span>
+<span id="cb6-29"><a href="one-sample-mean-precision-based-sample-size.html#cb6-29" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="one-sample-mean-precision-based-sample-size.html#cb6-30" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="one-sample-mean-precision-based-sample-size.html#cb6-31" tabindex="-1"></a><span class="co">#Find n based on various sd, method, or, p.</span></span>
+<span id="cb6-32"><a href="one-sample-mean-precision-based-sample-size.html#cb6-32" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="one-sample-mean-precision-based-sample-size.html#cb6-33" tabindex="-1"></a><span class="do">## set vector of precision values (p0) and methods (m0) to explore</span></span>
+<span id="cb6-34"><a href="one-sample-mean-precision-based-sample-size.html#cb6-34" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="at">by=</span>.<span class="dv">5</span>)</span>
+<span id="cb6-35"><a href="one-sample-mean-precision-based-sample-size.html#cb6-35" tabindex="-1"></a>sd0 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb6-36"><a href="one-sample-mean-precision-based-sample-size.html#cb6-36" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>)</span>
+<span id="cb6-37"><a href="one-sample-mean-precision-based-sample-size.html#cb6-37" tabindex="-1"></a><span class="co"># Data set with varying &#39;mean&#39; and &#39;w&#39;</span></span>
+<span id="cb6-38"><a href="one-sample-mean-precision-based-sample-size.html#cb6-38" tabindex="-1"></a>se_settings <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">p =</span> p0, <span class="at">sd =</span> sd0, <span class="at">m =</span> m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-39"><a href="one-sample-mean-precision-based-sample-size.html#cb6-39" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="one-sample-mean-precision-based-sample-size.html#cb6-40" tabindex="-1"></a><span class="co"># Apply the sim mean functions to all possibilities like se_settings</span></span>
+<span id="cb6-41"><a href="one-sample-mean-precision-based-sample-size.html#cb6-41" tabindex="-1"></a>se_settings<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(se_settings), <span class="cf">function</span>(idx) <span class="fu">with</span> (se_settings, <span class="fu">solve_n</span> (<span class="at">precision =</span> p[idx], <span class="at">sd =</span> sd[idx], <span class="at">method =</span> m[idx])))</span>
+<span id="cb6-42"><a href="one-sample-mean-precision-based-sample-size.html#cb6-42" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="one-sample-mean-precision-based-sample-size.html#cb6-43" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="one-sample-mean-precision-based-sample-size.html#cb6-44" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-45"><a href="one-sample-mean-precision-based-sample-size.html#cb6-45" tabindex="-1"></a><span class="fu">ggplot</span>(se_settings, <span class="fu">aes</span>(<span class="at">x =</span> p, <span class="at">y =</span> n, <span class="at">color =</span> m, <span class="at">group =</span> m)) <span class="sc">+</span></span>
+<span id="cb6-46"><a href="one-sample-mean-precision-based-sample-size.html#cb6-46" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb6-47"><a href="one-sample-mean-precision-based-sample-size.html#cb6-47" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="st">&quot;Method&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-48"><a href="one-sample-mean-precision-based-sample-size.html#cb6-48" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Target precision &#39;p&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-49"><a href="one-sample-mean-precision-based-sample-size.html#cb6-49" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Sample size &#39;n&#39;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-50"><a href="one-sample-mean-precision-based-sample-size.html#cb6-50" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Sample size required to achieve target precision&quot;</span>)</span></code></pre></div>
 <p><img src="A_01_one_mean_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>Graph various simulated precision’s for various methods, distributions,
 and target precisions.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="one-sample-mean-precision-based-sample-size.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  set up possible values for target precision, standard deviation, method, and distribution.</span></span>
-<span id="cb9-2"><a href="one-sample-mean-precision-based-sample-size.html#cb9-2" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="at">by=</span>.<span class="dv">5</span>)</span>
-<span id="cb9-3"><a href="one-sample-mean-precision-based-sample-size.html#cb9-3" aria-hidden="true" tabindex="-1"></a>sd0 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb9-4"><a href="one-sample-mean-precision-based-sample-size.html#cb9-4" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>)</span>
-<span id="cb9-5"><a href="one-sample-mean-precision-based-sample-size.html#cb9-5" aria-hidden="true" tabindex="-1"></a>d0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;normal&quot;</span>, <span class="st">&quot;uniform&quot;</span>, <span class="st">&quot;exp&quot;</span>)</span>
-<span id="cb9-6"><a href="one-sample-mean-precision-based-sample-size.html#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="one-sample-mean-precision-based-sample-size.html#cb9-7" aria-hidden="true" tabindex="-1"></a>sim_settings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb9-8"><a href="one-sample-mean-precision-based-sample-size.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(</span>
-<span id="cb9-9"><a href="one-sample-mean-precision-based-sample-size.html#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> sd0,</span>
-<span id="cb9-10"><a href="one-sample-mean-precision-based-sample-size.html#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> p0,</span>
-<span id="cb9-11"><a href="one-sample-mean-precision-based-sample-size.html#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-12"><a href="one-sample-mean-precision-based-sample-size.html#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">distribution =</span> d0),</span>
-<span id="cb9-13"><a href="one-sample-mean-precision-based-sample-size.html#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(</span>
-<span id="cb9-14"><a href="one-sample-mean-precision-based-sample-size.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> sd0,</span>
-<span id="cb9-15"><a href="one-sample-mean-precision-based-sample-size.html#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> p0,</span>
-<span id="cb9-16"><a href="one-sample-mean-precision-based-sample-size.html#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-17"><a href="one-sample-mean-precision-based-sample-size.html#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">distribution =</span> d0</span>
-<span id="cb9-18"><a href="one-sample-mean-precision-based-sample-size.html#cb9-18" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb9-19"><a href="one-sample-mean-precision-based-sample-size.html#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Allow function to be used from presize</span></span>
-<span id="cb9-20"><a href="one-sample-mean-precision-based-sample-size.html#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(presize)</span>
-<span id="cb9-21"><a href="one-sample-mean-precision-based-sample-size.html#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a function to calculate the simulated precisions.</span></span>
-<span id="cb9-22"><a href="one-sample-mean-precision-based-sample-size.html#cb9-22" aria-hidden="true" tabindex="-1"></a>sim_mean <span class="ot">&lt;-</span> <span class="cf">function</span> (sd, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">conf.level =</span> .<span class="dv">95</span>, precision, <span class="at">R =</span> <span class="dv">1000</span>, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>), <span class="at">distribution =</span> <span class="fu">c</span>(<span class="st">&quot;normal&quot;</span>, <span class="st">&quot;uniform&quot;</span>, <span class="st">&quot;exp&quot;</span>))  </span>
-<span id="cb9-23"><a href="one-sample-mean-precision-based-sample-size.html#cb9-23" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb9-24"><a href="one-sample-mean-precision-based-sample-size.html#cb9-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-25"><a href="one-sample-mean-precision-based-sample-size.html#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Allow variants of SE, t-value, and z-value; prevent non-characters from being allowed.</span></span>
-<span id="cb9-26"><a href="one-sample-mean-precision-based-sample-size.html#cb9-26" aria-hidden="true" tabindex="-1"></a>  method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(method, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>))</span>
-<span id="cb9-27"><a href="one-sample-mean-precision-based-sample-size.html#cb9-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-28"><a href="one-sample-mean-precision-based-sample-size.html#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Find sample size (n) depending on method.</span></span>
-<span id="cb9-29"><a href="one-sample-mean-precision-based-sample-size.html#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>)</span>
-<span id="cb9-30"><a href="one-sample-mean-precision-based-sample-size.html#cb9-30" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb9-31"><a href="one-sample-mean-precision-based-sample-size.html#cb9-31" aria-hidden="true" tabindex="-1"></a>    n<span class="ot">&lt;-</span>(sd<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>precision<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb9-32"><a href="one-sample-mean-precision-based-sample-size.html#cb9-32" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-33"><a href="one-sample-mean-precision-based-sample-size.html#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
-<span id="cb9-34"><a href="one-sample-mean-precision-based-sample-size.html#cb9-34" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb9-35"><a href="one-sample-mean-precision-based-sample-size.html#cb9-35" aria-hidden="true" tabindex="-1"></a>    alpha <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>conf.level)<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb9-36"><a href="one-sample-mean-precision-based-sample-size.html#cb9-36" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(alpha, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-37"><a href="one-sample-mean-precision-based-sample-size.html#cb9-37" aria-hidden="true" tabindex="-1"></a>   ci <span class="ot">&lt;-</span> precision<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb9-38"><a href="one-sample-mean-precision-based-sample-size.html#cb9-38" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> ((sd<span class="sc">*</span>z)<span class="sc">/</span>ci)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb9-39"><a href="one-sample-mean-precision-based-sample-size.html#cb9-39" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-40"><a href="one-sample-mean-precision-based-sample-size.html#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
-<span id="cb9-41"><a href="one-sample-mean-precision-based-sample-size.html#cb9-41" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb9-42"><a href="one-sample-mean-precision-based-sample-size.html#cb9-42" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">prec_mean</span> (<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">conf.width =</span> precision, <span class="at">conf.level =</span> conf.level, <span class="at">sd =</span> sd)<span class="sc">$</span>n</span>
-<span id="cb9-43"><a href="one-sample-mean-precision-based-sample-size.html#cb9-43" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-44"><a href="one-sample-mean-precision-based-sample-size.html#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="fu">stop</span> (<span class="st">&quot;&#39;method&#39; must be &#39;z&#39;, &#39;t&#39;, or &#39;SE&#39;&quot;</span>)</span>
-<span id="cb9-45"><a href="one-sample-mean-precision-based-sample-size.html#cb9-45" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-46"><a href="one-sample-mean-precision-based-sample-size.html#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Round n up to nearest interger.</span></span>
-<span id="cb9-47"><a href="one-sample-mean-precision-based-sample-size.html#cb9-47" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(n)</span>
-<span id="cb9-48"><a href="one-sample-mean-precision-based-sample-size.html#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-49"><a href="one-sample-mean-precision-based-sample-size.html#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="co">#Simulate possible outcome with the predicted SD and the predicted n and various distributions.</span></span>
-<span id="cb9-50"><a href="one-sample-mean-precision-based-sample-size.html#cb9-50" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (distribution <span class="sc">==</span> <span class="st">&quot;normal&quot;</span>)</span>
-<span id="cb9-51"><a href="one-sample-mean-precision-based-sample-size.html#cb9-51" aria-hidden="true" tabindex="-1"></a>se_vec <span class="ot">&lt;-</span> <span class="fu">replicate</span> (R, {x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sd); sd_x <span class="ot">=</span> <span class="fu">sd</span>(x); sd_x<span class="sc">/</span><span class="fu">sqrt</span>(n)})</span>
-<span id="cb9-52"><a href="one-sample-mean-precision-based-sample-size.html#cb9-52" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-53"><a href="one-sample-mean-precision-based-sample-size.html#cb9-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (distribution <span class="sc">==</span> <span class="st">&quot;uniform&quot;</span>)</span>
-<span id="cb9-54"><a href="one-sample-mean-precision-based-sample-size.html#cb9-54" aria-hidden="true" tabindex="-1"></a>  se_vec <span class="ot">&lt;-</span> <span class="fu">replicate</span> (R, {x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> n, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> sd<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">12</span>)); sd_x <span class="ot">=</span> <span class="fu">sd</span>(x); sd_x<span class="sc">/</span><span class="fu">sqrt</span>(n)})</span>
-<span id="cb9-55"><a href="one-sample-mean-precision-based-sample-size.html#cb9-55" aria-hidden="true" tabindex="-1"></a>  <span class="do">## To use the runif function the min and max must be calculated in relationship to standard deviation*.</span></span>
-<span id="cb9-56"><a href="one-sample-mean-precision-based-sample-size.html#cb9-56" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-57"><a href="one-sample-mean-precision-based-sample-size.html#cb9-57" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb9-58"><a href="one-sample-mean-precision-based-sample-size.html#cb9-58" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (distribution <span class="sc">==</span> <span class="st">&quot;exp&quot;</span>)</span>
-<span id="cb9-59"><a href="one-sample-mean-precision-based-sample-size.html#cb9-59" aria-hidden="true" tabindex="-1"></a>  se_vec <span class="ot">&lt;-</span> <span class="fu">replicate</span> (R, {x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> n, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span>sd); sd_x <span class="ot">=</span> <span class="fu">sd</span>(x); sd_x<span class="sc">/</span><span class="fu">sqrt</span>(n)})</span>
-<span id="cb9-60"><a href="one-sample-mean-precision-based-sample-size.html#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="do">##To use the rexp function the rate must be calculated in relationship to standard deviation**.</span></span>
-<span id="cb9-61"><a href="one-sample-mean-precision-based-sample-size.html#cb9-61" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-62"><a href="one-sample-mean-precision-based-sample-size.html#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
-<span id="cb9-63"><a href="one-sample-mean-precision-based-sample-size.html#cb9-63" aria-hidden="true" tabindex="-1"></a>      {</span>
-<span id="cb9-64"><a href="one-sample-mean-precision-based-sample-size.html#cb9-64" aria-hidden="true" tabindex="-1"></a>      t_value <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="at">p=</span> (<span class="dv">1</span> <span class="sc">-</span> conf.level)<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-65"><a href="one-sample-mean-precision-based-sample-size.html#cb9-65" aria-hidden="true" tabindex="-1"></a>      t_ci <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(t_value<span class="sc">*</span>se_vec)</span>
-<span id="cb9-66"><a href="one-sample-mean-precision-based-sample-size.html#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-67"><a href="one-sample-mean-precision-based-sample-size.html#cb9-67" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-68"><a href="one-sample-mean-precision-based-sample-size.html#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
-<span id="cb9-69"><a href="one-sample-mean-precision-based-sample-size.html#cb9-69" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb9-70"><a href="one-sample-mean-precision-based-sample-size.html#cb9-70" aria-hidden="true" tabindex="-1"></a>    z_value <span class="ot">&lt;-</span> <span class="fu">qnorm</span> (<span class="at">p =</span> (<span class="dv">1</span> <span class="sc">-</span> conf.level)<span class="sc">/</span><span class="dv">2</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-71"><a href="one-sample-mean-precision-based-sample-size.html#cb9-71" aria-hidden="true" tabindex="-1"></a>    z_ci <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(z_value<span class="sc">*</span>se_vec)</span>
-<span id="cb9-72"><a href="one-sample-mean-precision-based-sample-size.html#cb9-72" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-73"><a href="one-sample-mean-precision-based-sample-size.html#cb9-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-74"><a href="one-sample-mean-precision-based-sample-size.html#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>)</span>
-<span id="cb9-75"><a href="one-sample-mean-precision-based-sample-size.html#cb9-75" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb9-76"><a href="one-sample-mean-precision-based-sample-size.html#cb9-76" aria-hidden="true" tabindex="-1"></a>  precision_dataframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">method =</span> <span class="st">&quot;SE&quot;</span>, <span class="at">distribution =</span> distribution, <span class="at">precision =</span> se_vec, <span class="at">target =</span> precision)</span>
-<span id="cb9-77"><a href="one-sample-mean-precision-based-sample-size.html#cb9-77" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-78"><a href="one-sample-mean-precision-based-sample-size.html#cb9-78" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
-<span id="cb9-79"><a href="one-sample-mean-precision-based-sample-size.html#cb9-79" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb9-80"><a href="one-sample-mean-precision-based-sample-size.html#cb9-80" aria-hidden="true" tabindex="-1"></a>  precision_dataframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">method =</span> <span class="st">&quot;t-value&quot;</span>, <span class="at">distribution =</span> distribution, <span class="at">precision =</span> t_ci, <span class="at">target =</span> precision)</span>
-<span id="cb9-81"><a href="one-sample-mean-precision-based-sample-size.html#cb9-81" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-82"><a href="one-sample-mean-precision-based-sample-size.html#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
-<span id="cb9-83"><a href="one-sample-mean-precision-based-sample-size.html#cb9-83" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb9-84"><a href="one-sample-mean-precision-based-sample-size.html#cb9-84" aria-hidden="true" tabindex="-1"></a>  precision_dataframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">method =</span> <span class="st">&quot;z-value&quot;</span>, <span class="at">distribution =</span> distribution, <span class="at">precision =</span> z_ci, <span class="at">target =</span> precision)</span>
-<span id="cb9-85"><a href="one-sample-mean-precision-based-sample-size.html#cb9-85" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-86"><a href="one-sample-mean-precision-based-sample-size.html#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(precision_dataframe)  </span>
-<span id="cb9-87"><a href="one-sample-mean-precision-based-sample-size.html#cb9-87" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-88"><a href="one-sample-mean-precision-based-sample-size.html#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-89"><a href="one-sample-mean-precision-based-sample-size.html#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co">#Run simulation for each value of the grid:</span></span>
-<span id="cb9-90"><a href="one-sample-mean-precision-based-sample-size.html#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb9-91"><a href="one-sample-mean-precision-based-sample-size.html#cb9-91" aria-hidden="true" tabindex="-1"></a>sim_list <span class="ot">&lt;-</span> <span class="fu">lapply</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sim_settings), </span>
-<span id="cb9-92"><a href="one-sample-mean-precision-based-sample-size.html#cb9-92" aria-hidden="true" tabindex="-1"></a>              <span class="cf">function</span>(idx) <span class="fu">with</span> (sim_settings, </span>
-<span id="cb9-93"><a href="one-sample-mean-precision-based-sample-size.html#cb9-93" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">sim_mean</span>(<span class="at">precision =</span> p[idx], <span class="at">sd =</span> sd0, </span>
-<span id="cb9-94"><a href="one-sample-mean-precision-based-sample-size.html#cb9-94" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">method =</span> method[idx], <span class="at">distribution =</span> distribution[idx], <span class="at">R =</span> <span class="dv">1000</span>)))</span>
-<span id="cb9-95"><a href="one-sample-mean-precision-based-sample-size.html#cb9-95" aria-hidden="true" tabindex="-1"></a>sim_res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, sim_list)</span>
-<span id="cb9-96"><a href="one-sample-mean-precision-based-sample-size.html#cb9-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph sim_res</span></span>
-<span id="cb9-97"><a href="one-sample-mean-precision-based-sample-size.html#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb9-98"><a href="one-sample-mean-precision-based-sample-size.html#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-99"><a href="one-sample-mean-precision-based-sample-size.html#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sim_res, <span class="fu">aes</span> (<span class="at">x=</span>target, <span class="at">y =</span> precision, <span class="at">color =</span> <span class="fu">factor</span>(method))) <span class="sc">+</span></span>
-<span id="cb9-100"><a href="one-sample-mean-precision-based-sample-size.html#cb9-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(method<span class="sc">~</span>distribution, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-101"><a href="one-sample-mean-precision-based-sample-size.html#cb9-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="fu">interaction</span>(method, distribution, target)), <span class="at">outlier.size =</span> <span class="dv">1</span>, <span class="at">outlier.alpha =</span> <span class="fl">0.025</span>) <span class="sc">+</span></span>
-<span id="cb9-102"><a href="one-sample-mean-precision-based-sample-size.html#cb9-102" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>(<span class="st">&quot;Targeted precision&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-103"><a href="one-sample-mean-precision-based-sample-size.html#cb9-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="one-sample-mean-precision-based-sample-size.html#cb7-1" tabindex="-1"></a><span class="co">#  set up possible values for target precision, standard deviation, method, and distribution.</span></span>
+<span id="cb7-2"><a href="one-sample-mean-precision-based-sample-size.html#cb7-2" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="at">by=</span>.<span class="dv">5</span>)</span>
+<span id="cb7-3"><a href="one-sample-mean-precision-based-sample-size.html#cb7-3" tabindex="-1"></a>sd0 <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb7-4"><a href="one-sample-mean-precision-based-sample-size.html#cb7-4" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>)</span>
+<span id="cb7-5"><a href="one-sample-mean-precision-based-sample-size.html#cb7-5" tabindex="-1"></a>d0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;normal&quot;</span>, <span class="st">&quot;uniform&quot;</span>, <span class="st">&quot;exp&quot;</span>)</span>
+<span id="cb7-6"><a href="one-sample-mean-precision-based-sample-size.html#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="one-sample-mean-precision-based-sample-size.html#cb7-7" tabindex="-1"></a>sim_settings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb7-8"><a href="one-sample-mean-precision-based-sample-size.html#cb7-8" tabindex="-1"></a>  <span class="fu">expand.grid</span>(</span>
+<span id="cb7-9"><a href="one-sample-mean-precision-based-sample-size.html#cb7-9" tabindex="-1"></a>  <span class="at">sd =</span> sd0,</span>
+<span id="cb7-10"><a href="one-sample-mean-precision-based-sample-size.html#cb7-10" tabindex="-1"></a>  <span class="at">p =</span> p0,</span>
+<span id="cb7-11"><a href="one-sample-mean-precision-based-sample-size.html#cb7-11" tabindex="-1"></a>  <span class="at">method =</span> m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-12"><a href="one-sample-mean-precision-based-sample-size.html#cb7-12" tabindex="-1"></a>  <span class="at">distribution =</span> d0),</span>
+<span id="cb7-13"><a href="one-sample-mean-precision-based-sample-size.html#cb7-13" tabindex="-1"></a>  <span class="fu">expand.grid</span>(</span>
+<span id="cb7-14"><a href="one-sample-mean-precision-based-sample-size.html#cb7-14" tabindex="-1"></a>    <span class="at">sd =</span> sd0,</span>
+<span id="cb7-15"><a href="one-sample-mean-precision-based-sample-size.html#cb7-15" tabindex="-1"></a>  <span class="at">p =</span> p0,</span>
+<span id="cb7-16"><a href="one-sample-mean-precision-based-sample-size.html#cb7-16" tabindex="-1"></a>  <span class="at">method =</span> m0, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-17"><a href="one-sample-mean-precision-based-sample-size.html#cb7-17" tabindex="-1"></a>  <span class="at">distribution =</span> d0</span>
+<span id="cb7-18"><a href="one-sample-mean-precision-based-sample-size.html#cb7-18" tabindex="-1"></a>  ))</span>
+<span id="cb7-19"><a href="one-sample-mean-precision-based-sample-size.html#cb7-19" tabindex="-1"></a><span class="co"># Allow function to be used from presize</span></span>
+<span id="cb7-20"><a href="one-sample-mean-precision-based-sample-size.html#cb7-20" tabindex="-1"></a><span class="fu">library</span>(presize)</span>
+<span id="cb7-21"><a href="one-sample-mean-precision-based-sample-size.html#cb7-21" tabindex="-1"></a><span class="co"># Create a function to calculate the simulated precisions.</span></span>
+<span id="cb7-22"><a href="one-sample-mean-precision-based-sample-size.html#cb7-22" tabindex="-1"></a>sim_mean <span class="ot">&lt;-</span> <span class="cf">function</span> (sd, <span class="at">n=</span><span class="cn">NULL</span>, <span class="at">conf.level =</span> .<span class="dv">95</span>, precision, <span class="at">R =</span> <span class="dv">1000</span>, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>), <span class="at">distribution =</span> <span class="fu">c</span>(<span class="st">&quot;normal&quot;</span>, <span class="st">&quot;uniform&quot;</span>, <span class="st">&quot;exp&quot;</span>))  </span>
+<span id="cb7-23"><a href="one-sample-mean-precision-based-sample-size.html#cb7-23" tabindex="-1"></a>{</span>
+<span id="cb7-24"><a href="one-sample-mean-precision-based-sample-size.html#cb7-24" tabindex="-1"></a>  </span>
+<span id="cb7-25"><a href="one-sample-mean-precision-based-sample-size.html#cb7-25" tabindex="-1"></a><span class="co"># Allow variants of SE, t-value, and z-value; prevent non-characters from being allowed.</span></span>
+<span id="cb7-26"><a href="one-sample-mean-precision-based-sample-size.html#cb7-26" tabindex="-1"></a>  method <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(method, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">&quot;SE&quot;</span>, <span class="st">&quot;t-value&quot;</span>, <span class="st">&quot;z-value&quot;</span>))</span>
+<span id="cb7-27"><a href="one-sample-mean-precision-based-sample-size.html#cb7-27" tabindex="-1"></a>  </span>
+<span id="cb7-28"><a href="one-sample-mean-precision-based-sample-size.html#cb7-28" tabindex="-1"></a><span class="co"># Find sample size (n) depending on method.</span></span>
+<span id="cb7-29"><a href="one-sample-mean-precision-based-sample-size.html#cb7-29" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>)</span>
+<span id="cb7-30"><a href="one-sample-mean-precision-based-sample-size.html#cb7-30" tabindex="-1"></a>  {</span>
+<span id="cb7-31"><a href="one-sample-mean-precision-based-sample-size.html#cb7-31" tabindex="-1"></a>    n<span class="ot">&lt;-</span>(sd<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>precision<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb7-32"><a href="one-sample-mean-precision-based-sample-size.html#cb7-32" tabindex="-1"></a>  }</span>
+<span id="cb7-33"><a href="one-sample-mean-precision-based-sample-size.html#cb7-33" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
+<span id="cb7-34"><a href="one-sample-mean-precision-based-sample-size.html#cb7-34" tabindex="-1"></a>    {</span>
+<span id="cb7-35"><a href="one-sample-mean-precision-based-sample-size.html#cb7-35" tabindex="-1"></a>    alpha <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">-</span>conf.level)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb7-36"><a href="one-sample-mean-precision-based-sample-size.html#cb7-36" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(alpha, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-37"><a href="one-sample-mean-precision-based-sample-size.html#cb7-37" tabindex="-1"></a>   ci <span class="ot">&lt;-</span> precision<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb7-38"><a href="one-sample-mean-precision-based-sample-size.html#cb7-38" tabindex="-1"></a>  n <span class="ot">&lt;-</span> ((sd<span class="sc">*</span>z)<span class="sc">/</span>ci)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb7-39"><a href="one-sample-mean-precision-based-sample-size.html#cb7-39" tabindex="-1"></a>  }</span>
+<span id="cb7-40"><a href="one-sample-mean-precision-based-sample-size.html#cb7-40" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
+<span id="cb7-41"><a href="one-sample-mean-precision-based-sample-size.html#cb7-41" tabindex="-1"></a>  {</span>
+<span id="cb7-42"><a href="one-sample-mean-precision-based-sample-size.html#cb7-42" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">prec_mean</span> (<span class="at">mean =</span> <span class="dv">0</span>, <span class="at">conf.width =</span> precision, <span class="at">conf.level =</span> conf.level, <span class="at">sd =</span> sd)<span class="sc">$</span>n</span>
+<span id="cb7-43"><a href="one-sample-mean-precision-based-sample-size.html#cb7-43" tabindex="-1"></a>  }</span>
+<span id="cb7-44"><a href="one-sample-mean-precision-based-sample-size.html#cb7-44" tabindex="-1"></a><span class="cf">else</span> <span class="fu">stop</span> (<span class="st">&quot;&#39;method&#39; must be &#39;z&#39;, &#39;t&#39;, or &#39;SE&#39;&quot;</span>)</span>
+<span id="cb7-45"><a href="one-sample-mean-precision-based-sample-size.html#cb7-45" tabindex="-1"></a>  </span>
+<span id="cb7-46"><a href="one-sample-mean-precision-based-sample-size.html#cb7-46" tabindex="-1"></a><span class="co"># Round n up to nearest interger.</span></span>
+<span id="cb7-47"><a href="one-sample-mean-precision-based-sample-size.html#cb7-47" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(n)</span>
+<span id="cb7-48"><a href="one-sample-mean-precision-based-sample-size.html#cb7-48" tabindex="-1"></a></span>
+<span id="cb7-49"><a href="one-sample-mean-precision-based-sample-size.html#cb7-49" tabindex="-1"></a><span class="co">#Simulate possible outcome with the predicted SD and the predicted n and various distributions.</span></span>
+<span id="cb7-50"><a href="one-sample-mean-precision-based-sample-size.html#cb7-50" tabindex="-1"></a>  <span class="cf">if</span> (distribution <span class="sc">==</span> <span class="st">&quot;normal&quot;</span>)</span>
+<span id="cb7-51"><a href="one-sample-mean-precision-based-sample-size.html#cb7-51" tabindex="-1"></a>se_vec <span class="ot">&lt;-</span> <span class="fu">replicate</span> (R, {x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sd); sd_x <span class="ot">=</span> <span class="fu">sd</span>(x); sd_x<span class="sc">/</span><span class="fu">sqrt</span>(n)})</span>
+<span id="cb7-52"><a href="one-sample-mean-precision-based-sample-size.html#cb7-52" tabindex="-1"></a>  </span>
+<span id="cb7-53"><a href="one-sample-mean-precision-based-sample-size.html#cb7-53" tabindex="-1"></a>  <span class="cf">if</span> (distribution <span class="sc">==</span> <span class="st">&quot;uniform&quot;</span>)</span>
+<span id="cb7-54"><a href="one-sample-mean-precision-based-sample-size.html#cb7-54" tabindex="-1"></a>  se_vec <span class="ot">&lt;-</span> <span class="fu">replicate</span> (R, {x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> n, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> sd<span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">12</span>)); sd_x <span class="ot">=</span> <span class="fu">sd</span>(x); sd_x<span class="sc">/</span><span class="fu">sqrt</span>(n)})</span>
+<span id="cb7-55"><a href="one-sample-mean-precision-based-sample-size.html#cb7-55" tabindex="-1"></a>  <span class="do">## To use the runif function the min and max must be calculated in relationship to standard deviation*.</span></span>
+<span id="cb7-56"><a href="one-sample-mean-precision-based-sample-size.html#cb7-56" tabindex="-1"></a>  </span>
+<span id="cb7-57"><a href="one-sample-mean-precision-based-sample-size.html#cb7-57" tabindex="-1"></a>    </span>
+<span id="cb7-58"><a href="one-sample-mean-precision-based-sample-size.html#cb7-58" tabindex="-1"></a>  <span class="cf">if</span> (distribution <span class="sc">==</span> <span class="st">&quot;exp&quot;</span>)</span>
+<span id="cb7-59"><a href="one-sample-mean-precision-based-sample-size.html#cb7-59" tabindex="-1"></a>  se_vec <span class="ot">&lt;-</span> <span class="fu">replicate</span> (R, {x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> n, <span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span>sd); sd_x <span class="ot">=</span> <span class="fu">sd</span>(x); sd_x<span class="sc">/</span><span class="fu">sqrt</span>(n)})</span>
+<span id="cb7-60"><a href="one-sample-mean-precision-based-sample-size.html#cb7-60" tabindex="-1"></a>  <span class="do">##To use the rexp function the rate must be calculated in relationship to standard deviation**.</span></span>
+<span id="cb7-61"><a href="one-sample-mean-precision-based-sample-size.html#cb7-61" tabindex="-1"></a>  </span>
+<span id="cb7-62"><a href="one-sample-mean-precision-based-sample-size.html#cb7-62" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
+<span id="cb7-63"><a href="one-sample-mean-precision-based-sample-size.html#cb7-63" tabindex="-1"></a>      {</span>
+<span id="cb7-64"><a href="one-sample-mean-precision-based-sample-size.html#cb7-64" tabindex="-1"></a>      t_value <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="at">p=</span> (<span class="dv">1</span> <span class="sc">-</span> conf.level)<span class="sc">/</span><span class="dv">2</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-65"><a href="one-sample-mean-precision-based-sample-size.html#cb7-65" tabindex="-1"></a>      t_ci <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(t_value<span class="sc">*</span>se_vec)</span>
+<span id="cb7-66"><a href="one-sample-mean-precision-based-sample-size.html#cb7-66" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="one-sample-mean-precision-based-sample-size.html#cb7-67" tabindex="-1"></a>}</span>
+<span id="cb7-68"><a href="one-sample-mean-precision-based-sample-size.html#cb7-68" tabindex="-1"></a>  <span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
+<span id="cb7-69"><a href="one-sample-mean-precision-based-sample-size.html#cb7-69" tabindex="-1"></a>  {</span>
+<span id="cb7-70"><a href="one-sample-mean-precision-based-sample-size.html#cb7-70" tabindex="-1"></a>    z_value <span class="ot">&lt;-</span> <span class="fu">qnorm</span> (<span class="at">p =</span> (<span class="dv">1</span> <span class="sc">-</span> conf.level)<span class="sc">/</span><span class="dv">2</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-71"><a href="one-sample-mean-precision-based-sample-size.html#cb7-71" tabindex="-1"></a>    z_ci <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>(z_value<span class="sc">*</span>se_vec)</span>
+<span id="cb7-72"><a href="one-sample-mean-precision-based-sample-size.html#cb7-72" tabindex="-1"></a>    }</span>
+<span id="cb7-73"><a href="one-sample-mean-precision-based-sample-size.html#cb7-73" tabindex="-1"></a></span>
+<span id="cb7-74"><a href="one-sample-mean-precision-based-sample-size.html#cb7-74" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;SE&quot;</span>)</span>
+<span id="cb7-75"><a href="one-sample-mean-precision-based-sample-size.html#cb7-75" tabindex="-1"></a>{</span>
+<span id="cb7-76"><a href="one-sample-mean-precision-based-sample-size.html#cb7-76" tabindex="-1"></a>  precision_dataframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">method =</span> <span class="st">&quot;SE&quot;</span>, <span class="at">distribution =</span> distribution, <span class="at">precision =</span> se_vec, <span class="at">target =</span> precision)</span>
+<span id="cb7-77"><a href="one-sample-mean-precision-based-sample-size.html#cb7-77" tabindex="-1"></a>}</span>
+<span id="cb7-78"><a href="one-sample-mean-precision-based-sample-size.html#cb7-78" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;t-value&quot;</span>)</span>
+<span id="cb7-79"><a href="one-sample-mean-precision-based-sample-size.html#cb7-79" tabindex="-1"></a>{</span>
+<span id="cb7-80"><a href="one-sample-mean-precision-based-sample-size.html#cb7-80" tabindex="-1"></a>  precision_dataframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">method =</span> <span class="st">&quot;t-value&quot;</span>, <span class="at">distribution =</span> distribution, <span class="at">precision =</span> t_ci, <span class="at">target =</span> precision)</span>
+<span id="cb7-81"><a href="one-sample-mean-precision-based-sample-size.html#cb7-81" tabindex="-1"></a>}</span>
+<span id="cb7-82"><a href="one-sample-mean-precision-based-sample-size.html#cb7-82" tabindex="-1"></a><span class="cf">if</span> (method <span class="sc">==</span> <span class="st">&quot;z-value&quot;</span>)</span>
+<span id="cb7-83"><a href="one-sample-mean-precision-based-sample-size.html#cb7-83" tabindex="-1"></a>{</span>
+<span id="cb7-84"><a href="one-sample-mean-precision-based-sample-size.html#cb7-84" tabindex="-1"></a>  precision_dataframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sd =</span> sd, <span class="at">n =</span> n, <span class="at">method =</span> <span class="st">&quot;z-value&quot;</span>, <span class="at">distribution =</span> distribution, <span class="at">precision =</span> z_ci, <span class="at">target =</span> precision)</span>
+<span id="cb7-85"><a href="one-sample-mean-precision-based-sample-size.html#cb7-85" tabindex="-1"></a>}</span>
+<span id="cb7-86"><a href="one-sample-mean-precision-based-sample-size.html#cb7-86" tabindex="-1"></a><span class="fu">return</span>(precision_dataframe)  </span>
+<span id="cb7-87"><a href="one-sample-mean-precision-based-sample-size.html#cb7-87" tabindex="-1"></a>}</span>
+<span id="cb7-88"><a href="one-sample-mean-precision-based-sample-size.html#cb7-88" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="one-sample-mean-precision-based-sample-size.html#cb7-89" tabindex="-1"></a><span class="co">#Run simulation for each value of the grid:</span></span>
+<span id="cb7-90"><a href="one-sample-mean-precision-based-sample-size.html#cb7-90" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb7-91"><a href="one-sample-mean-precision-based-sample-size.html#cb7-91" tabindex="-1"></a>sim_list <span class="ot">&lt;-</span> <span class="fu">lapply</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sim_settings), </span>
+<span id="cb7-92"><a href="one-sample-mean-precision-based-sample-size.html#cb7-92" tabindex="-1"></a>              <span class="cf">function</span>(idx) <span class="fu">with</span> (sim_settings, </span>
+<span id="cb7-93"><a href="one-sample-mean-precision-based-sample-size.html#cb7-93" tabindex="-1"></a>                                  <span class="fu">sim_mean</span>(<span class="at">precision =</span> p[idx], <span class="at">sd =</span> sd0, </span>
+<span id="cb7-94"><a href="one-sample-mean-precision-based-sample-size.html#cb7-94" tabindex="-1"></a>                                        <span class="at">method =</span> method[idx], <span class="at">distribution =</span> distribution[idx], <span class="at">R =</span> <span class="dv">1000</span>)))</span>
+<span id="cb7-95"><a href="one-sample-mean-precision-based-sample-size.html#cb7-95" tabindex="-1"></a>sim_res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, sim_list)</span>
+<span id="cb7-96"><a href="one-sample-mean-precision-based-sample-size.html#cb7-96" tabindex="-1"></a><span class="co"># Graph sim_res</span></span>
+<span id="cb7-97"><a href="one-sample-mean-precision-based-sample-size.html#cb7-97" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-98"><a href="one-sample-mean-precision-based-sample-size.html#cb7-98" tabindex="-1"></a></span>
+<span id="cb7-99"><a href="one-sample-mean-precision-based-sample-size.html#cb7-99" tabindex="-1"></a><span class="fu">ggplot</span>(sim_res, <span class="fu">aes</span> (<span class="at">x=</span>target, <span class="at">y =</span> precision, <span class="at">color =</span> <span class="fu">factor</span>(method))) <span class="sc">+</span></span>
+<span id="cb7-100"><a href="one-sample-mean-precision-based-sample-size.html#cb7-100" tabindex="-1"></a>  <span class="fu">facet_grid</span>(method<span class="sc">~</span>distribution, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-101"><a href="one-sample-mean-precision-based-sample-size.html#cb7-101" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="fu">interaction</span>(method, distribution, target)), <span class="at">outlier.size =</span> <span class="dv">1</span>, <span class="at">outlier.alpha =</span> <span class="fl">0.025</span>) <span class="sc">+</span></span>
+<span id="cb7-102"><a href="one-sample-mean-precision-based-sample-size.html#cb7-102" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>(<span class="st">&quot;Targeted precision&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-103"><a href="one-sample-mean-precision-based-sample-size.html#cb7-103" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src="A_01_one_mean_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Notes</p>
 <ul>
@@ -544,15 +548,15 @@ collected.</p>
 rule for standard deviation which states the following:</p>
 <p>sd <span class="math inline">\(\approx \frac{max-min}{4}\)</span> where sd = standard deviation, max =
 estimated maximum value, and min = estimated minimum value.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="one-sample-mean-precision-based-sample-size.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate sample standard deviation for a given range. There must be exactly one one &#39;max&#39; and one &#39;min.&#39;</span></span>
-<span id="cb10-2"><a href="one-sample-mean-precision-based-sample-size.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; sd = standard deviation</span></span>
-<span id="cb10-3"><a href="one-sample-mean-precision-based-sample-size.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;  max = estimated maximum value</span></span>
-<span id="cb10-4"><a href="one-sample-mean-precision-based-sample-size.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;  min = estimated minimum value</span></span>
-<span id="cb10-5"><a href="one-sample-mean-precision-based-sample-size.html#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="one-sample-mean-precision-based-sample-size.html#cb10-6" aria-hidden="true" tabindex="-1"></a>sd_from_range <span class="ot">&lt;-</span> <span class="cf">function</span> (<span class="at">max=</span>max, <span class="at">min=</span>min, <span class="at">sd=</span><span class="cn">NULL</span>) {</span>
-<span id="cb10-7"><a href="one-sample-mean-precision-based-sample-size.html#cb10-7" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> (max <span class="sc">-</span> min)<span class="sc">/</span><span class="dv">4</span></span>
-<span id="cb10-8"><a href="one-sample-mean-precision-based-sample-size.html#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(sd)</span>
-<span id="cb10-9"><a href="one-sample-mean-precision-based-sample-size.html#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="one-sample-mean-precision-based-sample-size.html#cb8-1" tabindex="-1"></a><span class="co">#&#39; Calculate sample standard deviation for a given range. There must be exactly one one &#39;max&#39; and one &#39;min.&#39;</span></span>
+<span id="cb8-2"><a href="one-sample-mean-precision-based-sample-size.html#cb8-2" tabindex="-1"></a><span class="co">#&#39; sd = standard deviation</span></span>
+<span id="cb8-3"><a href="one-sample-mean-precision-based-sample-size.html#cb8-3" tabindex="-1"></a><span class="co">#&#39;  max = estimated maximum value</span></span>
+<span id="cb8-4"><a href="one-sample-mean-precision-based-sample-size.html#cb8-4" tabindex="-1"></a><span class="co">#&#39;  min = estimated minimum value</span></span>
+<span id="cb8-5"><a href="one-sample-mean-precision-based-sample-size.html#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="one-sample-mean-precision-based-sample-size.html#cb8-6" tabindex="-1"></a>sd_from_range <span class="ot">&lt;-</span> <span class="cf">function</span> (<span class="at">max=</span>max, <span class="at">min=</span>min, <span class="at">sd=</span><span class="cn">NULL</span>) {</span>
+<span id="cb8-7"><a href="one-sample-mean-precision-based-sample-size.html#cb8-7" tabindex="-1"></a>sd <span class="ot">&lt;-</span> (max <span class="sc">-</span> min)<span class="sc">/</span><span class="dv">4</span></span>
+<span id="cb8-8"><a href="one-sample-mean-precision-based-sample-size.html#cb8-8" tabindex="-1"></a><span class="fu">return</span>(sd)</span>
+<span id="cb8-9"><a href="one-sample-mean-precision-based-sample-size.html#cb8-9" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 <div id="example-revisited" class="section level2 hasAnchor" number="1.6">
@@ -583,7 +587,7 @@ MID*2 = precision
 choose a 95 percent confidence level.</p>
 <p>Since we have a n of 46 calculated from the solve_n function, the
 minimal sample size is 46.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="one-sample-mean-precision-based-sample-size.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">solve_n</span>(<span class="at">precision =</span> <span class="dv">6</span>, <span class="at">sd =</span><span class="dv">10</span>, <span class="at">method =</span> <span class="st">&quot;t-value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="one-sample-mean-precision-based-sample-size.html#cb9-1" tabindex="-1"></a><span class="fu">solve_n</span>(<span class="at">precision =</span> <span class="dv">6</span>, <span class="at">sd =</span><span class="dv">10</span>, <span class="at">method =</span> <span class="st">&quot;t-value&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 46</code></pre>
 <p>In conclusion, we can state the following:</p>
 <p>Assuming the standard deviation of 10, with 46 patients the mean PROMIS
