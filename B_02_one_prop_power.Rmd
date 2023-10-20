@@ -101,17 +101,17 @@ one_prop_test <- function(x, n, p0, method = c("binomial", "Wald","score"),
 
 ### Power formula {-}
 
-The power for a specific alternative $p=p_1$ are shown for the one-sided alternative hypothesis $H_{a2}$. The formula for $H_{a3}$ is a straightforward modification, while the power for the two-sided hypothesis is the sum of the powers for the two one-sided hypotheses using $\alpha/2$ instead of $\alpha$.
+The power for a specific alternative $p=p_1$ are shown for the one-sided alternative hypothesis $H_{a2}$. The formula for $H_{a3}$ is a straightforward modification (using $p_{0-}$ for the Wald test), while the power for the two-sided hypothesis is the sum of the powers for the two one-sided hypotheses using $\alpha/2$ instead of $\alpha$.
 
 **Power for the tests**
 
 | Test           | Prob(rejecting $H_0$ versus $H_{a2}$) | 
 |:---------------|:-------------------------------------:|
 | Exact binomial | $1 - F_{B(n,p_1)}(b_{\frac{\alpha}{2}; n,p_0})$|
-| Wald z-test    | $1 - \Phi\Big(z_\alpha - \frac{p_1 - p_0}{\sqrt{p_1(1-p_1)/n}}\Big)$ |
-| Score z-test   | $1 - \Phi\Big(z_\alpha \sqrt{\frac{p_0(1-p_0)}{p_1(1-p_1)}} - \frac{p_1 - p_0}{\sqrt{p_1(1-p_1)/n}}\Big)$ |
+| Wald z-test    | $1 - \Phi\Big(\frac{p_{0+} - p_1}{\sqrt{p_1(1-p_1)/n}}\Big)$ |
+| Score z-test   | $1 - \Phi\Big(\frac{p_{0} + z_\alpha\sqrt{p_0(1-p_0)/n} - p_1}{\sqrt{p_1(1-p_1)/n}}\Big)$ |
 
-where $F_{B(n,p)}$ is the cdf of the $Binomial(n,p)$ distribution, and $\Phi$ is the cdf of the $N(0,1)$ distribution.
+where $F_{B(n,p)}$ is the cdf of the $Binomial(n,p)$ distribution,  $\Phi$ is the cdf of the $N(0,1)$ distribution, $p_{0\pm}= \frac{np_0 + 0.5z_\alpha^2}{n + z_\alpha^2}  \pm \frac{n z_\alpha}{n+z_\alpha^2} \sqrt{\frac{p_0(1-p_0)}{n} + \frac{z_\alpha^2}{4n^2}}$ .
 
 ```{r OnePropPower}
 #' Calculate power for given sample size, or vice versa. Exactly one of 'n' and 'power' has to be NULL
@@ -141,10 +141,10 @@ power_one_prop_test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05,
     p.body.lo <- quote({
       ba <- qbinom(sig.level/sides, size = n, prob=p0, lower.tail=TRUE)
       pbinom(ba-1, size=n, prob=p, lower.tail = TRUE)})
-  } else {
+  } else if (test == "score"){
     za <- qnorm(sig.level/sides, lower.tail = FALSE)
-    vratio <- if (test == "score"){ sqrt(p0 * (1-p0) / (p * (1-p)))} else 1
-    delta <- (p0 - p)/sqrt(p*(1-p)) 
+    vratio <- sqrt(p0 * (1-p0) / (p * (1-p)))
+    delta <- (p0 - p) / sqrt(p * (1-p))
     
     p.body.up  <- quote({
       pnorm(za * vratio + delta * sqrt(n), lower.tail = FALSE)
@@ -152,7 +152,24 @@ power_one_prop_test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05,
     p.body.lo  <- quote({
       pnorm(-za * vratio + delta * sqrt(n), lower.tail = TRUE)
     })
+  } else if (test == "Wald") {
+    za <- qnorm(sig.level/sides, lower.tail = FALSE)
+    za2 <- za^2
+    v0 <- p0 * (1-p0)
+    v <- p * (1-p)
+    p.body.up  <- quote({
+      padj <- (n*p0 + za2/2)/ (n + za2)
+      w <-  n * za * sqrt(v0/n + za2/(4*n^2)) / (n + za2)
+      pnorm((padj + w - p)/sqrt(v/n), lower.tail = FALSE)
+    })
+    p.body.lo  <- quote({
+      padj <- (n*p0 + za2/2)/ (n + za2)
+      w <-  n * za * sqrt(v0/n + za2/(4*n^2)) / (n + za2)
+      pnorm((padj - w - p)/sqrt(v/n), lower.tail = TRUE)
+    })
+   
   }
+  
   
   p.body <- if (alternative=="two.sided")
     call("+", p.body.lo, p.body.up)
@@ -197,25 +214,34 @@ power_one_prop_test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05,
 
 ```
 
-## Getting inputs, worst/best case scenarios
+## Effect of inputs on the sample size
 
 
 The inputs needed to calculate the sample size are 
 
   * a best guess at $p$, the true value of the proportion to be tested
   * the desired power of the study
+  * the test to be used
   
-The following plot shows how the sample size depends on these inputs:   
+### Effect on sample size
 
-```{r OneProp_PowerPlot}
+The following plot shows how the sample size depends on these inputs. The y-axis is on a log-scale, so that the very large sample sizes don't dominate the plot.
+
+
+```{r OneProp_SSPlot}
 # set vector of 'p0', 'p' & 'power' values to explore
 p0 <- c(0.2, 0.5, 0.8)
-p1 <- seq(0.01, 0.99, by=0.01) 
+d0 <- seq(-0.15,0.15, by=0.01)
 pw0 <- c(0.8, 0.95)
 m0 <- c("Wald", "score", "binomial")
 # Data set with varying 'p' and 'power'
-pw_settings <- expand.grid(p = p1, p0=p0, power = pw0, method = m0,
+pw_settings <- expand.grid(delta=d0, 
+                           p0=p0, 
+                           power = pw0, 
+                           method = m0,
                            stringsAsFactors = FALSE)
+pw_settings$p <- pw_settings$p0 + pw_settings$delta
+
 # Calculate 'n' for each combination
 pw_settings$n <- sapply(1:nrow(pw_settings), 
   function(idx) 
@@ -226,13 +252,13 @@ pw_settings$n <- sapply(1:nrow(pw_settings),
 
 library(ggplot2)
 ggplot(pw_settings,
-       aes(x = p, y = n, linetype = factor(power), color = method)) +
-  facet_wrap(~p0) +
+       aes(x = delta, y = n, color = factor(p0), linetype = method)) +
+  facet_wrap(~ power) +
   geom_line() +
-  geom_vline(aes(xintercept = p0)) +
-  scale_color_discrete("Test") +
-  scale_linetype_discrete("Target power") +
-  xlab("Event probability 'p'") +
+  geom_vline(aes(xintercept = 0)) +
+  scale_color_discrete("p0") +
+  scale_linetype_discrete("Method") +
+  xlab("Change in event probability 'p' - 'p0'") +
   ylab("Sample size 'n'") +
   ggtitle("Sample size required to achieve target power") +
   scale_y_log10() +
@@ -240,7 +266,66 @@ ggplot(pw_settings,
 
 ```
 
+### Effect on power
 
+The following plot shows how the power depends on these inputs. 
+
+
+```{r OneProp_PowerPlot}
+# set vector of 'p0', 'p' & 'n' values to explore
+p0 <- c(0.2, 0.5, 0.8)
+d0 <- seq(-0.15,0.15, by=0.01)
+n0 <- c(20, 50)
+m0 <- c("Wald", "score", "binomial")
+# Data set with varying 'p' and 'n'
+ss_settings <- expand.grid(delta=d0, 
+                           p0=p0, 
+                           n = n0, 
+                           method = m0,
+                           stringsAsFactors = FALSE)
+ss_settings$p <- ss_settings$p0 + ss_settings$delta
+
+# Calculate 'power' for each combination
+ss_settings$power <- sapply(1:nrow(ss_settings), 
+  function(idx) 
+    with(ss_settings,
+         {power_one_prop_test(p=p[idx], p0=p0[idx], n=n[idx],
+                          test=method[idx])$power}))
+
+require(ggplot2)
+ggplot(ss_settings,
+       aes(x = delta, y = power, color = factor(p0), linetype = method)) +
+  facet_wrap(~ n) +
+  geom_line() +
+  geom_vline(aes(xintercept = 0)) +
+  geom_hline(aes(yintercept = 0.05), linetype="dotted") +
+  scale_color_discrete("p0") +
+  scale_linetype_discrete("Method") +
+  xlab("Change in event probability 'p' - 'p0'") +
+  scale_y_continuous("Power", expand=expansion()) +
+  ggtitle("Power of study for given settings") +
+  theme(legend.position = "top")
+
+```
+
+
+The following conclusions can be made based on the plots:
+
+ * The sample size depends on the direction of the difference:
+    - For $p_0=0.5$ the direction does not matter
+    - For $p_0<0.5$, fewer samples are needed if $p < p_0$, while for $p_0>0.5$ the effect is opposite. 
+    - If the sign of the difference is flipped, then the required sample size is the same if we also change $p_0$ to $1-p_0$. For example, detecting a 10% decrease from 20% (to 10%) requires the same sample size as detecting a 10% increase from 80% (to 90%).
+    
+ * Higher power will require larger sample size (as always), but its effect is smaller than that of the $p-p_0$ difference
+ 
+ * The three methods require similar samples size in general, especially the binomial and score tests, with a few notable exceptions:
+   - The Wald test requires fewer samples compared to the other methods when $p < p_0 < 0.5$, or symmetrically, $p > p_0 > 0.5$
+   - There is a smaller opposite effect when $p_0 < p < 0.5$ (or $p_0 > p > 0.5$), with the Wald test requiring the most samples, and the score test the least. 
+
+
+Most of these observations can be explained by the fact that the $p(1-p)$ terms showing up in the power formulas have a maximum at $p=0.5$.
+
+## Getting inputs, worst/best case scenarios
 
 ## Simulation studies
 
@@ -351,6 +436,8 @@ ggplot(sim1_pw, aes(x=p, y=est.power, color = factor(power))) +
   scale_y_continuous("Estimated power (+- SE)") +
   scale_color_discrete("Power")
 ```
+
+We can see that in most situations, the simulated power (dots) is close to the target value (horizontal line)-
 
 ### Achieved power with fixed sample size
 

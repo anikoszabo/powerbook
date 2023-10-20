@@ -1,7 +1,7 @@
 --- 
 title: "Power and Sample Size Manual"
 author: "Aniko Szabo"
-date: "2023-06-28"
+date: "2023-10-20"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -16,7 +16,7 @@ github-repo: anikoszabo/powerbook
 
 # Welcome {-}
 
-This repository is for a [Bookdown](https://bookdown.org/) version of a reference book for power and sample size calculations using R.
+This repository is for a [Bookdown](https://bookdown.org/) version of a reference book for power and sample size calculations using R: [https://anikoszabo.github.io/powerbook/].
 
 It is very much a work in progress, and fixes/contributions in the form of pull requests are welcome.
 
