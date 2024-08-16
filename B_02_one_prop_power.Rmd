@@ -145,7 +145,7 @@ power_one_prop_test <- function(p, p0, n=NULL, power=NULL, sig.level=0.05,
     za <- qnorm(sig.level/sides, lower.tail = FALSE)
     vratio <- sqrt(p0 * (1-p0) / (p * (1-p)))
     delta <- (p0 - p) / sqrt(p * (1-p))
-    
+
     p.body.up  <- quote({
       pnorm(za * vratio + delta * sqrt(n), lower.tail = FALSE)
     })
@@ -223,6 +223,7 @@ The inputs needed to calculate the sample size are
   * the desired power of the study
   * the test to be used
   
+
 ### Effect on sample size
 
 The following plot shows how the sample size depends on these inputs. The y-axis is on a log-scale, so that the very large sample sizes don't dominate the plot.
@@ -265,6 +266,7 @@ ggplot(pw_settings,
   theme(legend.position = "top")
 
 ```
+
 
 ### Effect on power
 
@@ -311,6 +313,7 @@ ggplot(ss_settings,
 
 The following conclusions can be made based on the plots:
 
+
  * The sample size depends on the direction of the difference:
     - For $p_0=0.5$ the direction does not matter
     - For $p_0<0.5$, fewer samples are needed if $p < p_0$, while for $p_0>0.5$ the effect is opposite. 
@@ -325,7 +328,7 @@ The following conclusions can be made based on the plots:
 
 Most of these observations can be explained by the fact that the $p(1-p)$ terms showing up in the power formulas have a maximum at $p=0.5$.
 
-## Getting inputs, worst/best case scenarios
+### Worst/best case scenarios
 
 ## Simulation studies
 
